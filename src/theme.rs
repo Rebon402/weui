@@ -63,7 +63,7 @@ pub enum Breakpoint {
     Desktop,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Spacing {
     None,
     Xs,
@@ -88,7 +88,7 @@ impl Spacing {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum SemanticColor {
     Primary,
     Success,
@@ -97,7 +97,7 @@ pub enum SemanticColor {
     Info,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Size {
     Xs,
     Sm,
@@ -136,13 +136,13 @@ impl Size {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Direction {
     Horizontal,
     Vertical,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Position {
     Start,
     Center,
@@ -152,17 +152,23 @@ pub enum Position {
     Evenly,
 }
 
-#[derive(Default)]
+#[derive(Clone)]
 pub struct ThemeContext {
-    theme: RwSignal<Theme>,
-    mode: RwSignal<ThemeMode>,
+    pub theme: RwSignal<Theme>,
+    pub mode: RwSignal<ThemeMode>,
+}
+
+impl Default for ThemeContext {
+    fn default() -> Self {
+        Self {
+            theme: RwSignal::new(Theme::default()),
+            mode: RwSignal::new(ThemeMode::Light),
+        }
+    }
 }
 
 pub fn provide_theme() {
-    provide_context(ThemeContext {
-        theme: RwSignal::new(Theme::default()),
-        mode: RwSignal::new(ThemeMode::Light),
-    });
+    provide_context(ThemeContext::default());
 }
 
 pub fn use_theme() -> ThemeContext {

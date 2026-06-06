@@ -46,27 +46,30 @@ pub fn Spinner(
             role="status"
             aria-label="Loading"
         >
-            {move || match spinner_type.get() {
-                SpinnerType::Circular => view! {
-                    <svg class="weui-spinner__circular" viewBox="25 25 50 50">
-                        <circle cx="50" cy="50" r="20" fill="none" stroke="currentColor" stroke-width="4"/>
-                    </svg>
-                },
-                SpinnerType::Dots => view! {
-                    <div class="weui-spinner__dots">
-                        <span class="weui-spinner__dot"/>
-                        <span class="weui-spinner__dot"/>
-                        <span class="weui-spinner__dot"/>
-                    </div>
-                },
-                SpinnerType::Bars => view! {
-                    <div class="weui-spinner__bars">
-                        <span class="weui-spinner__bar"/>
-                        <span class="weui-spinner__bar"/>
-                        <span class="weui-spinner__bar"/>
-                        <span class="weui-spinner__bar"/>
-                    </div>
-                },
+            {move || {
+                let content: View = match spinner_type.get() {
+                    SpinnerType::Circular => view! {
+                        <svg class="weui-spinner__circular" viewBox="25 25 50 50">
+                            <circle cx="50" cy="50" r="20" fill="none" stroke="currentColor" stroke-width="4"/>
+                        </svg>
+                    }.into_view(),
+                    SpinnerType::Dots => view! {
+                        <div class="weui-spinner__dots">
+                            <span class="weui-spinner__dot"/>
+                            <span class="weui-spinner__dot"/>
+                            <span class="weui-spinner__dot"/>
+                        </div>
+                    }.into_view(),
+                    SpinnerType::Bars => view! {
+                        <div class="weui-spinner__bars">
+                            <span class="weui-spinner__bar"/>
+                            <span class="weui-spinner__bar"/>
+                            <span class="weui-spinner__bar"/>
+                            <span class="weui-spinner__bar"/>
+                        </div>
+                    }.into_view(),
+                };
+                content
             }}
         </div>
     }

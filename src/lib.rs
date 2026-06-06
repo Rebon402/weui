@@ -1,48 +1,44 @@
+use leptos::*;
+
 pub mod components;
 pub mod theme;
 
-pub use components::button::{Button, ButtonVariant};
-pub use components::cell::Cell;
-pub use components::icon::Icon;
-pub use components::toast::Toast;
-pub use components::dialog::Dialog;
-pub use components::actionsheet::ActionSheet;
-pub use components::input::Input;
-pub use components::checkbox::Checkbox;
-pub use theme::{Theme, inject_theme, init_theme};
+pub use components::actionsheet::{ActionSheetAction, ActionSheetConfig, ActionSheetController, ActionSheetProvider, provide_actionsheet, use_actionsheet};
+pub use components::badge::{Badge, BadgeType, BadgeVariant};
+pub use components::button::{Button, ButtonGroup, ButtonType, ButtonVariant, ButtonSize, ButtonShape};
+pub use components::cell::{Cell, CellGroup, CellSize, CellAlign, CellLabelAlign};
+pub use components::checkbox::{Checkbox, CheckboxDirection, CheckboxGroup, CheckboxShape, CheckboxSize, CheckboxLabelPosition, Radio};
+pub use components::dialog::{DialogAction, DialogConfig, DialogController, DialogProvider, DialogSize, DialogType, provide_dialog, use_dialog};
+pub use components::divider::{Divider, DividerOrientation, DividerStrokeStyle};
+pub use components::form::{Form, FormField, FormLayout, ValidateStatus};
+pub use components::grid::{Grid, GridItem, GridDirection, GridAlign, GridJustify};
+pub use components::icon::{Icon, IconButton, IconName};
+pub use components::input::{Input, TextArea, InputType, InputAlign};
+pub use components::navbar::{Navbar, NavbarVariant};
+pub use components::overlay::{Overlay, OverlayColor};
+pub use components::picker::{Picker, PickerColumnView, PickerMode};
+pub use components::popup::{Popup, PopupPosition, PopupAnimation};
+pub use components::search::{SearchBar, SearchShape};
+pub use components::slider::{Slider, SliderOrientation};
+pub use components::spinner::{Spinner, Loading, SpinnerType, SpinnerSize};
+pub use components::switch::{Switch, Toggle, SwitchSize, SwitchVariant};
+pub use components::tag::{Tag, TagType, TagSize, TagVariant};
+pub use components::tabbar::{Tabbar, TabbarItemData, TabbarVariant};
+pub use components::toast::{ToastConfig, ToastController, ToastItem, ToastPosition, ToastProvider, ToastType, ToastCommand, provide_toast, use_toast};
+pub use components::theme::{Theme, ThemeContext, ThemeMode, ColorScheme, Breakpoint, Spacing, SemanticColor, Size, Direction, Position};
+pub use components::uploader::{Uploader, UploaderStatus, UploadFile, UploaderSize};
 
 use wasm_bindgen::prelude::*;
 use web_sys::Document;
 
+#[cfg(target_arch = "wasm32")]
 #[wasm_bindgen(start)]
 pub fn main() {
     console_error_panic_hook::set_once();
+    leptos::mount_to_body(|| view! { <App/> });
 }
 
-#[wasm_bindgen]
-pub fn init(document: &Document) {
-    inject_theme(document);
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_button_creation() {
-        let btn = Button::new("Test".to_string());
-        assert_eq!(btn.text, "Test");
-    }
-
-    #[test]
-    fn test_cell_creation() {
-        let cell = Cell::new("Content".to_string());
-        assert_eq!(cell.content, "Content");
-    }
-
-    #[test]
-    fn test_theme_default() {
-        let theme = Theme::new();
-        assert_eq!(theme.primary_color, "#07C160");
-    }
+#[component]
+fn App() -> impl IntoView {
+    view! { <div class="weui-app">"Hello WeUI"</div> }
 }

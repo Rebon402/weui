@@ -8,7 +8,7 @@ pub enum UploaderStatus {
     Failed,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct UploadFile {
     pub id: String,
     pub name: String,
@@ -60,12 +60,8 @@ pub fn Uploader(
         }
     };
     let handle_change = move |ev: ev::Event| {
-        let input = event_target::<web_sys::HtmlInputElement>(&ev);
-        if let Some(files) = input.files() {
-            let _len = files.length();
-            if let Some(cb) = &after_read {
-                cb.call(file_list.get());
-            }
+        if let Some(cb) = &after_read {
+            cb.call(file_list.get());
         }
     };
     let handle_delete = move |file: UploadFile| {
@@ -123,7 +119,7 @@ pub fn Uploader(
                                 </div>
                             }
                         })
-                        .collect::<Vec<_>>()
+                        .collect_view()
                 }}
             </div>
             {move || {

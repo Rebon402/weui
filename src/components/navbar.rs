@@ -28,50 +28,48 @@ pub fn Navbar(
             cb.call(());
         }
     };
-    let left = create_memo(move |_| {
-        if show_back.get() {
-            view! {
-                <div class="weui-navbar__left">
-                    <button
-                        class="weui-navbar__back"
-                        on:click=handle_back
-                        type="button"
-                        aria-label="Go back"
-                    >
-                        <span class="weui-navbar__back-icon"/>
-                        {move || {
-                            if !back_text.get().is_empty() {
-                                view! { <span>{back_text.get()}</span> }
-                            } else {
-                                view! {}
-                            }
-                        }}
-                    </button>
-                </div>
-            }
-        } else {
-            view! {}
-        }
-    });
-    let center = create_memo(move |_| {
-        if !title.get().is_empty() {
-            view! {
-                <div class="weui-navbar__center">
-                    <span class="weui-navbar__title">{title.get()}</span>
-                </div>
-            }
-        } else {
-            view! {}
-        }
-    });
     view! {
         <nav
             class=move || format!("weui-navbar {} {}", variant_class(), class.get())
             class:weui-navbar--fixed=move || fixed.get()
             role="navigation"
         >
-            {left}
-            {center}
+            {move || {
+                if show_back.get() {
+                    Some(view! {
+                        <div class="weui-navbar__left">
+                            <button
+                                class="weui-navbar__back"
+                                on:click=handle_back
+                                type="button"
+                                aria-label="Go back"
+                            >
+                                <span class="weui-navbar__back-icon"/>
+                                {move || {
+                                    if !back_text.get().is_empty() {
+                                        view! { <span>{back_text.get()}</span> }
+                                    } else {
+                                        view! { <></> }
+                                    }
+                                }}
+                            </button>
+                        </div>
+                    })
+                } else {
+                    None
+                }
+            }}
+            {move || {
+                if !title.get().is_empty() {
+                    Some(view! {
+                        <div class="weui-navbar__center">
+                            <span class="weui-navbar__title">{title.get()}</span>
+                        </div>
+                    })
+                } else {
+                    None
+                }
+            }}
             <div class="weui-navbar__right">
                 {children()}
             </div>

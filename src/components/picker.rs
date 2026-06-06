@@ -10,7 +10,7 @@ pub enum PickerMode {
     Region,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct PickerColumn {
     pub values: Vec<String>,
     pub default_index: usize,
@@ -26,7 +26,7 @@ pub fn Picker(
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
     #[prop(into, default = None.into())] on_confirm: Option<Callback<Vec<usize>>>,
     #[prop(into, default = None.into())] on_cancel: Option<Callback<()>>,
-    #[prop(into, default = None.into())) on_change: Option<Callback<(usize, usize)>>,
+    #[prop(into, default = None.into())] on_change: Option<Callback<(usize, usize)>>,
 ) -> impl IntoView {
     let selected_indices = create_memo(move |_| {
         columns
@@ -72,15 +72,16 @@ pub fn Picker(
                             .into_iter()
                             .enumerate()
                             .map(|(col_idx, col)| {
+                                let on_change_clone = on_change.clone();
                                 view! {
                                     <PickerColumnView
                                         column=col
                                         index=col_idx
-                                        on_change=on_change.clone()
+                                        on_change=on_change_clone
                                     />
                                 }
                             })
-                            .collect::<Vec<_>>()
+                            .collect_view()
                     }}
                 </div>
             </div>
@@ -120,7 +121,7 @@ fn PickerColumnView(
                         </div>
                     }
                 })
-                .collect::<Vec<_>>()}
+                .collect_view()}
         </div>
     }
 }

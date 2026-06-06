@@ -6,12 +6,6 @@ pub enum SliderOrientation {
     Vertical,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum SliderValue {
-    Single(f64),
-    Range(f64, f64),
-}
-
 #[component]
 pub fn Slider(
     #[prop(into)] value: MaybeSignal<f64>,
