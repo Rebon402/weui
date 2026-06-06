@@ -62,15 +62,16 @@ pub fn Tag(
             cb.call(());
         }
     };
-    let class_clone2 = class.clone();
+    let class_clone = class.clone();
+    let tag_classes = move || format!("weui-tag {} {} {}", type_class(), size_class(), variant_class());
     view! {
         <Show when=move || visible.get()>
             <span
-                class=|| format!("weui-tag {} {} {} {}", type_class(), size_class(), variant_class(), class_clone2.get())
+                class=move || format!("{} {}", tag_classes(), class_clone.get())
                 class=("weui-tag--round", move || round.get())
                 class=("weui-tag--mark", move || mark.get())
             >
-                {move || children()}
+                {children()}
                 <Show when=move || closable.get()>
                     <button
                         class="weui-tag__close"

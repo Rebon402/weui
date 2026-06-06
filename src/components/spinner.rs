@@ -87,9 +87,8 @@ pub fn Loading(
     #[prop(into, default = SpinnerSize::Md.into())] size: MaybeSignal<SpinnerSize>,
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
 ) -> impl IntoView {
-    let class_clone = class.clone();
     let class_clone2 = class.clone();
-    let text_clone_for_content = text.clone();
+    let show_text = move || !text.get().is_empty();
     view! {
         <Show when=move || visible.get()>
             <div
@@ -97,9 +96,9 @@ pub fn Loading(
                 class=("weui-loading--fullscreen", move || fullscreen.get())
             >
                 <Spinner spinner_type=spinner_type size=size/>
-                <Show when=move || !text.get().is_empty()>
+                <Show when=show_text>
                     <span class="weui-loading__text">
-                        {move || text_clone_for_content.get()}
+                        {text.get()}
                     </span>
                 </Show>
             </div>

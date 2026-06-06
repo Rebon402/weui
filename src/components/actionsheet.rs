@@ -156,7 +156,7 @@ fn ActionSheetView(
                                 {cfg.actions.iter().map(|action| {
                                     let action = action.clone();
                                     let label = action.label.clone();
-                                    let value = action.value.clone();
+                                    let _value = action.value.clone();
                                     view! {
                                         <button
                                             class="weui-actionsheet__item"

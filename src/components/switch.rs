@@ -48,8 +48,6 @@ pub fn Switch(
         }
         on_change.call(!checked.get());
     };
-    let active_text_clone_for_show = active_text.clone();
-    let inactive_text_clone_for_show = inactive_text.clone();
     view! {
         <button
             class=move || format!("weui-switch {} {} {}", size_class(), variant_class(), class.get())
@@ -68,13 +66,13 @@ pub fn Switch(
                     <span class="weui-switch__loading"/>
                 </Show>
             </span>
-            <Show when=move || !active_text_clone_for_show.get().is_empty() || !inactive_text_clone_for_show.get().is_empty()>
+            <Show when=move || !active_text.get().is_empty() || !inactive_text.get().is_empty()>
                 <span class="weui-switch__label">
                     <Show when=move || checked.get()>
-                        <span>{move || active_text.get()}</span>
+                        <span>{active_text.get()}</span>
                     </Show>
                     <Show when=move || !checked.get()>
-                        <span>{move || inactive_text.get()}</span>
+                        <span>{inactive_text.get()}</span>
                     </Show>
                 </span>
             </Show>

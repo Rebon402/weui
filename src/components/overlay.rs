@@ -27,7 +27,7 @@ pub fn Overlay(
     view! {
         <Show when=move || visible.get()>
             <div
-                class=move || format!("weui-overlay {} {}", color_class(), class_clone.get())
+                class=|| format!("weui-overlay {} {}", color_class(), class_clone())
                 class=("weui-overlay--blur", move || blur.get())
                 style=move || format!("opacity: {}; z-index: {};", opacity.get(), z_index.get())
                 aria-hidden="true"

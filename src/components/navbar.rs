@@ -20,6 +20,10 @@ pub fn Navbar(
     children: Children,
 ) -> impl IntoView {
     let class_clone = class.clone();
+    let back_text_clone_for_condition = back_text.clone();
+    let back_text_clone_for_content = back_text.clone();
+    let title_clone_for_condition = title.clone();
+    let title_clone_for_content = title.clone();
     let variant_class = move || match variant.get() {
         NavbarVariant::Default => "",
         NavbarVariant::Primary => "weui-navbar--primary",
@@ -32,7 +36,7 @@ pub fn Navbar(
             class=("weui-navbar--fixed", move || fixed.get())
             role="navigation"
         >
-            <Show when=move || show_back.get()>
+            <Show when=show_back>
                 <div class="weui-navbar__left">
                     <button
                         class="weui-navbar__back"
@@ -41,15 +45,15 @@ pub fn Navbar(
                         on:click=move |_| { if let Some(cb) = &on_back { cb.call(()) } }
                     >
                         <span class="weui-navbar__back-icon"/>
-                        <Show when=move || !back_text.get().is_empty()>
-                            <span>{move || back_text.get()}</span>
+                        <Show when=|| !back_text_clone_for_condition().is_empty()>
+                            <span>{|| back_text_clone_for_content()}</span>
                         </Show>
                     </button>
                 </div>
             </Show>
-            <Show when=move || !title.get().is_empty()>
+            <Show when=|| !title_clone_for_condition().is_empty()>
                 <div class="weui-navbar__center">
-                    <span class="weui-navbar__title">{move || title.get()}</span>
+                    <span class="weui-navbar__title">{|| title_clone_for_content()}</span>
                 </div>
             </Show>
             <div class="weui-navbar__right">

@@ -70,9 +70,7 @@ pub fn Uploader(
             cb.call(file);
         }
     };
-    let accept_clone = accept.clone();
     let class_clone = class.clone();
-    let accept_clone2 = accept.clone();
     let file_list_clone = file_list.clone();
     view! {
         <div
@@ -133,7 +131,7 @@ pub fn Uploader(
                         node_ref=input_ref
                         type="file"
                         class="weui-uploader__input-native"
-                        accept=accept_clone2
+                        accept=accept
                         multiple=multiple
                         disabled=disabled
                         on:change=handle_change
