@@ -1,4 +1,4 @@
-use super::button::{Button, ButtonVariant, ButtonSize};
+use super::button::{Button, ButtonVariant};
 use super::icon::{Icon, IconName};
 use leptos::*;
 
@@ -144,7 +144,7 @@ fn ActionSheetView(
     view! {
         <div
             class="weui-actionsheet-overlay"
-            class:weui-actionsheet-overlay--visible=move || visible.get()
+            class=("weui-actionsheet-overlay--visible", move || visible.get())
             on:click=handle_overlay_click
             on:keydown=handle_keydown
             role="dialog"
@@ -152,7 +152,7 @@ fn ActionSheetView(
         >
             <div
                 class="weui-actionsheet"
-                class:weui-actionsheet--visible=move || show_anim.get()
+                class=("weui-actionsheet--visible", move || show_anim.get())
                 node_ref=sheet_ref
                 role="menu"
             >
@@ -174,8 +174,8 @@ fn ActionSheetView(
                                 view! {
                                     <button
                                         class="weui-actionsheet__item"
-                                        class:weui-actionsheet__item--destructive=destructive
-                                        class:weui-actionsheet__item--disabled=disabled
+                                        class=("weui-actionsheet__item--destructive", destructive)
+                                        class=("weui-actionsheet__item--disabled", disabled)
                                         disabled=disabled
                                         on:click=move |_| {
                                             if close_on_select {
