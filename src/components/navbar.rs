@@ -46,14 +46,14 @@ pub fn Navbar(
                     >
                         <span class="weui-navbar__back-icon"/>
                         <Show when=|| !back_text_clone_for_condition().is_empty()>
-                            <span>{|| back_text_clone_for_content()}</span>
+                            <span>{back_text_clone_for_content}</span>
                         </Show>
                     </button>
                 </div>
             </Show>
             <Show when=|| !title_clone_for_condition().is_empty()>
                 <div class="weui-navbar__center">
-                    <span class="weui-navbar__title">{|| title_clone_for_content()}</span>
+                    <span class="weui-navbar__title">{title_clone_for_content}</span>
                 </div>
             </Show>
             <div class="weui-navbar__right">
