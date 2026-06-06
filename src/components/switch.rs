@@ -47,12 +47,14 @@ pub fn Switch(
         }
         on_change.call(!checked.get());
     };
-    let class_clone = class.clone();
     let active_text_clone = active_text.clone();
     let inactive_text_clone = inactive_text.clone();
+    let checked_clone = checked.clone();
+    let active_text_clone2 = active_text.clone();
+    let inactive_text_clone2 = inactive_text.clone();
     view! {
         <button
-            class=move || format!("weui-switch {} {} {}", size_class(), variant_class(), class_clone.get())
+            class=move || format!("weui-switch {} {} {}", size_class(), variant_class(), class.get())
             class=("weui-switch--checked", move || checked.get())
             class=("weui-switch--disabled", move || disabled.get())
             class=("weui-switch--loading", move || loading.get())
@@ -70,11 +72,11 @@ pub fn Switch(
             </span>
             <Show when=move || !active_text_clone.get().is_empty() || !inactive_text_clone.get().is_empty()>
                 <span class="weui-switch__label">
-                    <Show when=move || checked.get()>
-                        <span>{active_text_clone.get()}</span>
+                    <Show when=move || checked_clone.get()>
+                        <span>{move || active_text_clone2.get()}</span>
                     </Show>
-                    <Show when=move || !checked.get()>
-                        <span>{inactive_text_clone.get()}</span>
+                    <Show when=move || !checked_clone.get()>
+                        <span>{move || inactive_text_clone2.get()}</span>
                     </Show>
                 </span>
             </Show>
