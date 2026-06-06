@@ -1,4 +1,5 @@
 use leptos::*;
+use leptos::Show;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum PickerMode {
@@ -25,12 +26,12 @@ pub fn Picker(
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
 ) -> impl IntoView {
     let class_clone = class.clone();
-    let class_clone2 = class.clone();
     let title_clone = title.clone();
     let title_clone2 = title.clone();
+    let columns_clone = columns.clone();
     view! {
         <Show when=move || visible.get()>
-            <div class=move || format!("weui-picker {}", class_clone2.get())>
+            <div class=|| format!("weui-picker {}", class_clone.get())>
                 <div class="weui-picker__header">
                     <button class="weui-picker__btn" type="button">
                         "Cancel"
@@ -42,7 +43,7 @@ pub fn Picker(
                 </div>
                 <div class="weui-picker__body">
                     {move || {
-                        columns
+                        columns_clone
                             .get()
                             .into_iter()
                             .enumerate()

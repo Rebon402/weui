@@ -1,4 +1,5 @@
 use leptos::*;
+use leptos::Show;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum SwitchSize {
@@ -47,11 +48,8 @@ pub fn Switch(
         }
         on_change.call(!checked.get());
     };
-    let active_text_clone = active_text.clone();
-    let inactive_text_clone = inactive_text.clone();
-    let checked_clone = checked.clone();
-    let active_text_clone2 = active_text.clone();
-    let inactive_text_clone2 = inactive_text.clone();
+    let active_text_clone_for_show = active_text.clone();
+    let inactive_text_clone_for_show = inactive_text.clone();
     view! {
         <button
             class=move || format!("weui-switch {} {} {}", size_class(), variant_class(), class.get())
@@ -70,13 +68,13 @@ pub fn Switch(
                     <span class="weui-switch__loading"/>
                 </Show>
             </span>
-            <Show when=move || !active_text_clone.get().is_empty() || !inactive_text_clone.get().is_empty()>
+            <Show when=move || !active_text_clone_for_show.get().is_empty() || !inactive_text_clone_for_show.get().is_empty()>
                 <span class="weui-switch__label">
-                    <Show when=move || checked_clone.get()>
-                        <span>{move || active_text_clone2.get()}</span>
+                    <Show when=move || checked.get()>
+                        <span>{move || active_text.get()}</span>
                     </Show>
-                    <Show when=move || !checked_clone.get()>
-                        <span>{move || inactive_text_clone2.get()}</span>
+                    <Show when=move || !checked.get()>
+                        <span>{move || inactive_text.get()}</span>
                     </Show>
                 </span>
             </Show>

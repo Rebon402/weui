@@ -1,4 +1,5 @@
 use leptos::*;
+use leptos::Show;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum TabbarVariant {
@@ -54,6 +55,7 @@ pub fn TabbarItem(
     let active = use_context::<ReadSignal<String>>();
     let key_clone = key.clone();
     let key_clone2 = key.clone();
+    let key_clone3 = key.clone();
     let is_active = create_memo(move |_| {
         if let Some(active_key) = active {
             active_key.get() == key_clone.get()
@@ -63,7 +65,7 @@ pub fn TabbarItem(
     });
     let handle_click = move |_: ev::MouseEvent| {
         if let Some(cb) = &on_click {
-            cb.call(key_clone2.get());
+            cb.call(key_clone3.get());
         }
     };
     let class_clone = class.clone();

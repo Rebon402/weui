@@ -1,4 +1,5 @@
 use leptos::*;
+use leptos::Show;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum TagType {
@@ -61,9 +62,11 @@ pub fn Tag(
             cb.call(());
         }
     };
+    let class_clone2 = class.clone();
     view! {
         <Show when=move || visible.get()>
-            <span class=|| format!("weui-tag {} {} {} {}", type_class(), size_class(), variant_class(), class.get())
+            <span
+                class=|| format!("weui-tag {} {} {} {}", type_class(), size_class(), variant_class(), class_clone2.get())
                 class=("weui-tag--round", move || round.get())
                 class=("weui-tag--mark", move || mark.get())
             >

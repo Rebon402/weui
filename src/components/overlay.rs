@@ -1,4 +1,5 @@
 use leptos::*;
+use leptos::Show;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum OverlayColor {
@@ -23,11 +24,10 @@ pub fn Overlay(
         OverlayColor::Transparent => "weui-overlay--transparent",
     };
     let class_clone = class.clone();
-    let color_class_clone = color_class.clone();
     view! {
         <Show when=move || visible.get()>
             <div
-                class=|| format!("weui-overlay {} {}", color_class_clone(), class_clone.get())
+                class=move || format!("weui-overlay {} {}", color_class(), class_clone.get())
                 class=("weui-overlay--blur", move || blur.get())
                 style=move || format!("opacity: {}; z-index: {};", opacity.get(), z_index.get())
                 aria-hidden="true"

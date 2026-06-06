@@ -1,4 +1,5 @@
 use leptos::*;
+use leptos::Show;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum PopupPosition {
@@ -46,7 +47,7 @@ pub fn Popup(
             <div class="weui-popup__wrapper">
                 <div class="weui-popup__mask"/>
                 <div
-                    class=move || format!("weui-popup {} {} {}", position_class(), animation_class(), class_clone2.get())
+                    class=|| format!("weui-popup {} {} {}", position_class(), animation_class(), class_clone2.get())
                     class=("weui-popup--round", move || round.get())
                     class=("weui-popup--safe-area", move || safe_area.get())
                     role="dialog"

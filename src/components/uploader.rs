@@ -1,4 +1,5 @@
 use leptos::*;
+use leptos::Show;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum UploaderStatus {
@@ -72,6 +73,7 @@ pub fn Uploader(
     let accept_clone = accept.clone();
     let class_clone = class.clone();
     let accept_clone2 = accept.clone();
+    let file_list_clone = file_list.clone();
     view! {
         <div
             class=|| format!("weui-uploader {} {}", size_class(), class_clone.get())
@@ -79,7 +81,7 @@ pub fn Uploader(
         >
             <div class="weui-uploader__files">
                 {move || {
-                    file_list
+                    file_list_clone
                         .get()
                         .into_iter()
                         .map(|file| {
@@ -96,7 +98,7 @@ pub fn Uploader(
                                     class=("weui-uploader__file--failed", matches!(file_status, UploaderStatus::Failed))
                                 >
                                     <Show when=move || file_url.is_some()>
-                                        <img class="weui-uploader__img" src=|| file_url.clone().unwrap() alt=|| file_name.clone()/
+                                        <img class="weui-uploader__img" src=|| file_url.clone().unwrap() alt=|| file_name.clone()/>
                                     </Show>
                                     <Show when=move || file_url.is_none()>
                                         <div class="weui-uploader__file-icon"/>

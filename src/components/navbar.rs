@@ -1,4 +1,5 @@
 use leptos::*;
+use leptos::Show;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum NavbarVariant {
@@ -19,10 +20,6 @@ pub fn Navbar(
     children: Children,
 ) -> impl IntoView {
     let class_clone = class.clone();
-    let back_text_clone = back_text.clone();
-    let back_text_clone2 = back_text.clone();
-    let title_clone = title.clone();
-    let title_clone2 = title.clone();
     let variant_class = move || match variant.get() {
         NavbarVariant::Default => "",
         NavbarVariant::Primary => "weui-navbar--primary",
@@ -44,15 +41,15 @@ pub fn Navbar(
                         on:click=move |_| { if let Some(cb) = &on_back { cb.call(()) } }
                     >
                         <span class="weui-navbar__back-icon"/>
-                        <Show when=move || !back_text_clone.get().is_empty()>
-                            <span>{back_text_clone2.get()}</span>
+                        <Show when=move || !back_text.get().is_empty()>
+                            <span>{move || back_text.get()}</span>
                         </Show>
                     </button>
                 </div>
             </Show>
-            <Show when=move || !title_clone.get().is_empty()>
+            <Show when=move || !title.get().is_empty()>
                 <div class="weui-navbar__center">
-                    <span class="weui-navbar__title">{title_clone2.get()}</span>
+                    <span class="weui-navbar__title">{move || title.get()}</span>
                 </div>
             </Show>
             <div class="weui-navbar__right">
