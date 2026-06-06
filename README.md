@@ -1,6 +1,8 @@
 # weui
 
-WeUI is a Rust-first UI utility crate that helps you embed WeUI styles, generate HTML pages, and integrate with Leptos-based applications.
+[![docs.rs](https://img.shields.io/docsrs/weui)](https://docs.rs/weui) [![Crates.io](https://img.shields.io/crates/v/weui)](https://crates.io/crates/weui)
+
+WeUI is a Rust-first UI utility crate for embedding WeUI styles, generating HTML pages, and integrating with Leptos applications.
 
 ## Features
 
@@ -8,6 +10,7 @@ WeUI is a Rust-first UI utility crate that helps you embed WeUI styles, generate
 - HTML generation helpers with `html_page()` and `html_page_with_assets()`
 - Leptos-friendly theme types and context utilities
 - Example applications in `examples/html.rs` and `examples/http.rs`
+- Stable default build with optional `hydrate` / `nightly` support
 
 ## Quick start
 
@@ -20,6 +23,17 @@ fn main() {
     println!("{}", html);
 }
 ```
+
+## Optional features
+
+- `ssr` (default) — enable Leptos SSR utilities
+- `hydrate` — enable Leptos hydration helpers
+- `nightly` — enable Leptos nightly-only features
+
+Build with optional features:
+
+- `cargo build --features hydrate`
+- `cargo build --features nightly`
 
 ## Examples
 

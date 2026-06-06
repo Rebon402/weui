@@ -1,8 +1,9 @@
 [package]
 name = "weui"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Rebon402"]
 edition = "2024"
+rust-version = "1.85"
 description = "A Rust-driven WeUI utility crate for generating HTML, CSS, and Leptos-friendly UI themes."
 readme = "README.md"
 license = "Apache-2.0"
@@ -12,13 +13,21 @@ documentation = "https://docs.rs/weui"
 keywords = ["weui", "rust", "leptos", "html", "css", "ui", "web"]
 categories = ["web-programming"]
 
+[badges]
+docsrs = { status = "stable" }
+
+[package.metadata.docs.rs]
+all-features = false
+features = ["ssr"]
+
 [features]
-default = ["hydrate"]
+default = ["ssr"]
 hydrate = ["leptos/hydrate"]
 ssr = ["leptos/ssr"]
+nightly = ["leptos/nightly"]
 
 [dependencies]
-leptos = { version = "0.6", features = ["nightly", "ssr"] }
+leptos = { version = "0.6", default-features = false, features = ["ssr"] }
 leptos_meta = { version = "0.6" }
 leptos_router = { version = "0.6" }
 wasm-bindgen = "0.2"

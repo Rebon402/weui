@@ -143,7 +143,7 @@ pub fn Uploader(
                         .collect_view()
                 }}
             </div>
-            <Show when=move || can_upload()>
+            <Show when=move || can_upload.get()>
                 <div class="weui-uploader__input-wrapper" on:click=handle_click.clone()>
                     <div class="weui-uploader__input">
                         <span class="weui-uploader__input-icon"/>

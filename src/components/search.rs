@@ -56,7 +56,7 @@ pub fn SearchBar(
                 on:input=handle_input
                 role="searchbox"
             />
-            <Show when=move || show_clear()>
+            <Show when=move || show_clear.get()>
                 <button
                     class="weui-search__clear"
                     on:click=handle_clear

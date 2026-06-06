@@ -111,7 +111,7 @@ pub fn Input(
                     style=style
                     on:input=handle_input
                 />
-                <Show when=move || show_clear()>
+                <Show when=move || show_clear.get()>
                     <button
                         class="weui-input__clear"
                         on:click=handle_clear

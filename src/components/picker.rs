@@ -45,7 +45,7 @@ pub fn Picker(
                 </div>
                 <div class="weui-picker__body">
                     {move || {
-                        picker_columns()
+                        picker_columns.get()
                             .into_iter()
                             .enumerate()
                             .map(|(_col_idx, col)| {

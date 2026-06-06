@@ -40,7 +40,7 @@ pub fn Navbar(
             class=("weui-navbar--fixed", move || fixed.get())
             role="navigation"
         >
-            <Show when=show_back>
+            <Show when=move || show_back.get()>
                 <div class="weui-navbar__left">
                     <button
                         class="weui-navbar__back"
