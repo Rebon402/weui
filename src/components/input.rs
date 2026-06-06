@@ -43,7 +43,9 @@ pub fn Input(
     #[prop(into, default = "".into())] style: MaybeSignal<String>,
 ) -> impl IntoView {
     let input_ref = create_node_ref::<html::Input>();
-    let has_value = create_memo(move |_| !value.get().is_empty());
+    let value_clone = value.clone();
+    let has_value = create_memo(move |_| !value_clone.get().is_empty());
+    let value_clone2 = value.clone();
     let show_clear = create_memo(move |_| clearable.get() && has_value.get() && !disabled.get());
     create_effect(move |_| {
         if focus.get() {
@@ -72,6 +74,7 @@ pub fn Input(
         InputAlign::Center => "weui-input--center",
         InputAlign::Right => "weui-input--right",
     };
+    let align_class_clone = align_class.clone();
     let handle_input = move |ev: ev::Event| {
         let target = event_target::<web_sys::HtmlInputElement>(&ev);
         on_input.call(target.value());
@@ -80,29 +83,31 @@ pub fn Input(
         on_input.call("".to_string());
         input_ref.get().map(|el| el.focus().ok());
     };
-    let label_val = label.clone();
-    let error_message_clone = error_message.clone();
+    let label_val1 = label.clone();
+    let label_val2 = label.clone();
+    let error_message_clone1 = error_message.clone();
+    let error_message_clone2 = error_message.clone();
     view! {
         <div
             class="weui-input-wrap"
             class=("weui-input-wrap--error", move || error.get())
             class=("weui-input-wrap--disabled", move || disabled.get())
         >
-            <Show when=move || !label_val.get().is_empty()>
-                <label class="weui-input__label">{label_val.get()}</label>
+            <Show when=move || !label_val1.get().is_empty()>
+                <label class="weui-input__label">{label_val2.get()}</label>
             </Show>
             <div class="weui-input__container">
                 <input
                     node_ref=input_ref
                     type=type_attr
-                    class=move || format!("weui-input {}", align_class())
+                    class=move || format!("weui-input {}", align_class_clone())
                     class=("weui-input--error", move || error.get())
-                    prop:value=value.clone()
-                    placeholder=placeholder
-                    disabled=disabled
-                    readonly=readonly
-                    required=required
-                    style=style
+                    prop:value=value_clone2.clone()
+                    placeholder
+                    disabled
+                    readonly
+                    required
+                    style
                     on:input=handle_input
                 />
                 <Show when=move || show_clear()>
@@ -115,8 +120,8 @@ pub fn Input(
                     </button>
                 </Show>
             </div>
-            <Show when=move || error.get() && !error_message.get().is_empty()>
-                <div class="weui-input__error">{error_message.get()}</div>
+            <Show when=move || error.get() && !error_message_clone1.get().is_empty()>
+                <div class="weui-input__error">{error_message_clone2.get()}</div>
             </Show>
         </div>
     }
@@ -138,37 +143,41 @@ pub fn TextArea(
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
     #[prop(into, default = "".into())] style: MaybeSignal<String>,
 ) -> impl IntoView {
+    let value_clone = value.clone();
     let handle_input = move |ev: ev::Event| {
         let target = event_target::<web_sys::HtmlTextAreaElement>(&ev);
         on_input.call(target.value());
     };
-    let label_val = label.clone();
-    let error_message_clone = error_message.clone();
-    let value_clone = value.clone();
+    let label_val1 = label.clone();
+    let label_val2 = label.clone();
+    let error_message_clone1 = error_message.clone();
+    let error_message_clone2 = error_message.clone();
+    let class_clone = class.clone();
+    let value_clone2 = value.clone();
     view! {
         <div
             class="weui-textarea-wrap"
             class=("weui-textarea-wrap--error", move || error.get())
             class=("weui-textarea-wrap--disabled", move || disabled.get())
         >
-            <Show when=move || !label_val.get().is_empty()>
-                <label class="weui-textarea__label">{label_val.get()}</label>
+            <Show when=move || !label_val1.get().is_empty()>
+                <label class="weui-textarea__label">{label_val2.get()}</label>
             </Show>
             <textarea
-                class=move || format!("weui-textarea {}", class.get())
+                class=move || format!("weui-textarea {}", class_clone.get())
                 class=("weui-textarea--error", move || error.get())
                 class=("weui-textarea--auto-height", move || auto_height.get())
-                prop:value=value_clone
-                placeholder=placeholder
-                disabled=disabled
-                readonly=readonly
-                required=required
+                prop:value=value_clone2
+                placeholder
+                disabled
+                readonly
+                required
                 rows=move || { if rows.get() > 0 { rows.get() } else { 3 } }
-                style=style
+                style
                 on:input=handle_input
             />
-            <Show when=move || error.get() && !error_message_clone.get().is_empty()>
-                <div class="weui-textarea__error">{error_message_clone.get()}</div>
+            <Show when=move || error.get() && !error_message_clone1.get().is_empty()>
+                <div class="weui-textarea__error">{error_message_clone2.get()}</div>
             </Show>
         </div>
     }

@@ -113,10 +113,12 @@ fn ActionSheetView(
     visible: RwSignal<bool>,
 ) -> impl IntoView {
     let config_clone = config.clone();
-    let close_on_select_val = move || config.get().as_ref().map(|c| c.close_on_select).unwrap_or(true);
+    let config_clone2 = config.clone();
+    let config_clone3 = config.clone();
+    let close_on_select_val = move || config_clone.get().as_ref().map(|c| c.close_on_select).unwrap_or(true);
     let handle_overlay_click = move |ev: ev::MouseEvent| {
         ev.stop_propagation();
-        let close_on_overlay = config_clone.get().as_ref().map(|c| c.close_on_overlay).unwrap_or(true);
+        let close_on_overlay = config_clone2.get().as_ref().map(|c| c.close_on_overlay).unwrap_or(true);
         if close_on_overlay {
             visible.set(false);
         }
@@ -139,18 +141,21 @@ fn ActionSheetView(
                 class="weui-actionsheet"
                 role="menu"
             >
-                {move || config.get().map(|cfg| {
+                {move || config_clone3.get().map(|cfg| {
                     let cfg = cfg.clone();
+                    let title = cfg.title.clone();
+                    let has_title = !title.is_empty();
+                    let close_on_sel = close_on_select_val();
                     view! {
                         <div class="weui-actionsheet__inner">
-                            <Show when=move || !cfg.title.is_empty()>
-                                <div class="weui-actionsheet__title">{cfg.title.clone()}</div>
+                            <Show when=move || has_title>
+                                <div class="weui-actionsheet__title">{title.clone()}</div>
                             </Show>
                             <div class="weui-actionsheet__menu">
                                 {cfg.actions.iter().map(|action| {
                                     let action = action.clone();
+                                    let label = action.label.clone();
                                     let value = action.value.clone();
-                                    let close_on_sel = close_on_select_val();
                                     view! {
                                         <button
                                             class="weui-actionsheet__item"
@@ -164,7 +169,7 @@ fn ActionSheetView(
                                             }
                                             role="menuitem"
                                         >
-                                            <span class="weui-actionsheet__item-label">{action.label.clone()}</span>
+                                            <span class="weui-actionsheet__item-label">{label.clone()}</span>
                                         </button>
                                     }
                                 }).collect::<Vec<_>>()}

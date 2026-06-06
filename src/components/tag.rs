@@ -64,8 +64,7 @@ pub fn Tag(
     let class_clone = class.clone();
     view! {
         <Show when=move || visible.get()>
-            <span
-                class=move || format!("weui-tag {} {} {} {}", type_class(), size_class(), variant_class(), class_clone.get())
+            <span class=|| format!("weui-tag {} {} {} {}", type_class(), size_class(), variant_class(), class_clone.get())
                 class=("weui-tag--round", move || round.get())
                 class=("weui-tag--mark", move || mark.get())
             >

@@ -39,9 +39,10 @@ pub fn Spinner(
             format!("color: {};", c)
         }
     };
+    let class_clone = class.clone();
     view! {
         <div
-            class=move || format!("weui-spinner {} {} {}", type_class(), size_class(), class.get())
+            class=move || format!("weui-spinner {} {} {}", type_class(), size_class(), class_clone.get())
             style=spinner_style
             role="status"
             aria-label="Loading"
@@ -84,17 +85,18 @@ pub fn Loading(
     #[prop(into, default = SpinnerSize::Md.into())] size: MaybeSignal<SpinnerSize>,
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
 ) -> impl IntoView {
-    let class_clone = class.clone();
     let text_clone = text.clone();
+    let text_clone2 = text.clone();
+    let class_clone = class.clone();
     view! {
         <Show when=move || visible.get()>
             <div
-                class=move || format!("weui-loading {}", class_clone.get())
+                class=|| format!("weui-loading {}", class_clone.get())
                 class=("weui-loading--fullscreen", move || fullscreen.get())
             >
                 <Spinner spinner_type=spinner_type size=size/>
                 <Show when=move || !text_clone.get().is_empty()>
-                    <span class="weui-loading__text">{text_clone.get()}</span>
+                    <span class="weui-loading__text">{text_clone2.get()}</span>
                 </Show>
             </div>
         </Show>

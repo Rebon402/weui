@@ -37,19 +37,26 @@ pub fn Badge(
 ) -> impl IntoView {
     let text_clone = text.clone();
     let count_clone = count.clone();
-    let is_dot = move || badge_type.get() == BadgeType::Dot;
-    let content = move || match badge_type.get() {
+    let badge_type_clone = badge_type.clone();
+    
+    let is_dot = move || badge_type_clone.get() == BadgeType::Dot;
+    let content = move || match badge_type_clone.get() {
         BadgeType::Dot => "".to_string(),
         BadgeType::Count => format!(" {}", count_clone.get()),
         BadgeType::Text => text_clone.get(),
         BadgeType::Corner => text_clone.get(),
     };
+    
+    let badge_type_clone2 = badge_type.clone();
+    let visible_clone = visible.clone();
+    let size_clone = size.clone();
+    
     view! {
         <span
             class=move || format!("weui-badge {} {} {} {}", class.get(), 
-                if badge_type.get() == BadgeType::Dot { "weui-badge--dot" } else { "" },
-                if visible.get() { "weui-badge--visible" } else { "" },
-                match size.get() { BadgeSize::Sm => "weui-badge--sm", BadgeSize::Md => "", BadgeSize::Lg => "weui-badge--lg" })
+                if badge_type_clone2.get() == BadgeType::Dot { "weui-badge--dot" } else { "" },
+                if visible_clone.get() { "weui-badge--visible" } else { "" },
+                match size_clone.get() { BadgeSize::Sm => "weui-badge--sm", BadgeSize::Md => "", BadgeSize::Lg => "weui-badge--lg" })
             class=("weui-badge--default", move || variant.get() == BadgeVariant::Default)
             class=("weui-badge--primary", move || variant.get() == BadgeVariant::Primary)
             class=("weui-badge--success", move || variant.get() == BadgeVariant::Success)

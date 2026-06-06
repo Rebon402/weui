@@ -53,6 +53,7 @@ pub fn TabbarItem(
 ) -> impl IntoView {
     let active = use_context::<ReadSignal<String>>();
     let key_clone = key.clone();
+    let key_clone2 = key.clone();
     let is_active = create_memo(move |_| {
         if let Some(active_key) = active {
             active_key.get() == key_clone.get()
@@ -62,13 +63,16 @@ pub fn TabbarItem(
     });
     let handle_click = move |_: ev::MouseEvent| {
         if let Some(cb) = &on_click {
-            cb.call(key_clone.get());
+            cb.call(key_clone2.get());
         }
     };
     let class_clone = class.clone();
     let icon_clone = icon.clone();
+    let icon_clone2 = icon.clone();
     let dot_clone = dot.clone();
     let badge_clone = badge.clone();
+    let badge_clone2 = badge.clone();
+    let dot_clone2 = dot.clone();
     let title_clone = title.clone();
     view! {
         <button
@@ -81,13 +85,13 @@ pub fn TabbarItem(
         >
             <span class="weui-tabbar__icon">
                 <Show when=move || !icon_clone.get().is_empty()>
-                    <span class="weui-tabbar__icon-img">{icon_clone.get()}</span>
+                    <span class="weui-tabbar__icon-img">{icon_clone2.get()}</span>
                 </Show>
                 <Show when=move || dot_clone.get()>
                     <span class="weui-tabbar__dot"/>
                 </Show>
-                <Show when=move || !dot_clone.get() && !badge_clone.get().is_empty()>
-                    <span class="weui-tabbar__badge">{badge_clone.get()}</span>
+                <Show when=move || !dot_clone2.get() && !badge_clone.get().is_empty()>
+                    <span class="weui-tabbar__badge">{badge_clone2.get()}</span>
                 </Show>
             </span>
             <span class="weui-tabbar__label">{title_clone}</span>

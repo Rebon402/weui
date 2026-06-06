@@ -40,12 +40,13 @@ pub fn Popup(
         PopupAnimation::None => "",
     };
     let class_clone = class.clone();
+    let class_clone2 = class.clone();
     view! {
         <Show when=move || visible.get()>
             <div class="weui-popup__wrapper">
                 <div class="weui-popup__mask"/>
                 <div
-                    class=move || format!("weui-popup {} {} {}", position_class(), animation_class(), class_clone.get())
+                    class=move || format!("weui-popup {} {} {}", position_class(), animation_class(), class_clone2.get())
                     class=("weui-popup--round", move || round.get())
                     class=("weui-popup--safe-area", move || safe_area.get())
                     role="dialog"

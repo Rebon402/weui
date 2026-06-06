@@ -14,6 +14,15 @@ pub enum DividerStrokeStyle {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum DividerColor {
+    Default,
+    Primary,
+    Success,
+    Warning,
+    Error,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum TextAlign {
     Left,
     Center,
@@ -22,10 +31,11 @@ pub enum TextAlign {
 
 #[component]
 pub fn Divider(
-    #[prop(into)] orientation: MaybeSignal<DividerOrientation>,
-    #[prop(into)] stroke_style: MaybeSignal<DividerStrokeStyle>,
-    #[prop(into)] align: MaybeSignal<TextAlign>,
     #[prop(into, default = "".into())] text: MaybeSignal<String>,
+    #[prop(into, default = DividerOrientation::Horizontal.into())] orientation: MaybeSignal<DividerOrientation>,
+    #[prop(into, default = DividerStrokeStyle::Solid.into())] stroke: MaybeSignal<DividerStrokeStyle>,
+    #[prop(into, default = DividerColor::Default.into())] color: MaybeSignal<DividerColor>,
+    #[prop(into, default = TextAlign::Center.into())] align: MaybeSignal<TextAlign>,
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
     #[prop(into, default = "".into())] style: MaybeSignal<String>,
 ) -> impl IntoView {
@@ -33,27 +43,35 @@ pub fn Divider(
         DividerOrientation::Horizontal => "weui-divider--horizontal",
         DividerOrientation::Vertical => "weui-divider--vertical",
     };
-    let stroke_class = move || match stroke_style.get() {
-        DividerStrokeStyle::Solid => "",
+    let stroke_class = move || match stroke.get() {
+        DividerStrokeStyle::Solid => "weui-divider--solid",
         DividerStrokeStyle::Dashed => "weui-divider--dashed",
         DividerStrokeStyle::Dotted => "weui-divider--dotted",
+    };
+    let color_class = move || match color.get() {
+        DividerColor::Default => "",
+        DividerColor::Primary => "weui-divider--primary",
+        DividerColor::Success => "weui-divider--success",
+        DividerColor::Warning => "weui-divider--warning",
+        DividerColor::Error => "weui-divider--error",
     };
     let align_class = move || match align.get() {
         TextAlign::Left => "weui-divider--left",
         TextAlign::Center => "",
         TextAlign::Right => "weui-divider--right",
     };
-    let text_val = text.clone();
-    let has_text = move || !text_val.get().is_empty();
+    let text_clone1 = text.clone();
+    let text_clone2 = text.clone();
+    let text_clone3 = text.clone();
     view! {
         <div
-            class=move || format!("weui-divider {} {} {} {}", orientation_class(), stroke_class(), align_class(), class.get())
-            class=("weui-divider--with-text", has_text.clone())
+            class=move || format!("weui-divider {} {} {} {} {}", orientation_class(), stroke_class(), align_class(), color_class(), class.get())
+            class=("weui-divider--with-text", move || !text_clone1.get().is_empty())
             role="separator"
             style=style
         >
-            <Show when=has_text>
-                <span class="weui-divider__text">{text_val.get()}</span>
+            <Show when=move || !text_clone2.get().is_empty()>
+                <span class="weui-divider__text">{text_clone3.get()}</span>
             </Show>
         </div>
     }

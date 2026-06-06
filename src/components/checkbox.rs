@@ -36,21 +36,12 @@ pub fn Checkbox(
     #[prop(into, default = "".into())] value: MaybeSignal<String>,
 ) -> impl IntoView {
     let input_ref = create_node_ref::<html::Input>();
-    let label_pos = label_position;
-    let handle_change = move |ev: ev::Event| {
-        if disabled.get() || readonly.get() {
-            ev.prevent_default();
-            return;
-        }
-        let target = event_target::<web_sys::HtmlInputElement>(&ev);
-        on_change.call(target.checked());
-    };
-    let handle_click = move |ev: ev::MouseEvent| {
-        if label_pos.get() == CheckboxLabelPosition::Left {
-            ev.prevent_default();
-            input_ref.get().map(|el| el.click());
-        }
-    };
+    let label_val = label.clone();
+    let label_val2 = label.clone();
+    let check_ind = indeterminate;
+    let check_val = checked;
+    let shape_val = shape;
+    let label_position_clone = label_position.clone();
     let shape_class = move || match shape.get() {
         CheckboxShape::Square => "weui-checkbox--square",
         CheckboxShape::Round => "weui-checkbox--round",
@@ -60,6 +51,20 @@ pub fn Checkbox(
         CheckboxSize::Medium => "",
         CheckboxSize::Large => "weui-checkbox--large",
     };
+    let handle_change = move |ev: ev::Event| {
+        if disabled.get() || readonly.get() {
+            ev.prevent_default();
+            return;
+        }
+        let target = event_target::<web_sys::HtmlInputElement>(&ev);
+        on_change.call(target.checked());
+    };
+    let handle_click = move |ev: ev::MouseEvent| {
+        if label_position.get() == CheckboxLabelPosition::Left {
+            ev.prevent_default();
+            input_ref.get().map(|el| el.click());
+        }
+    };
     let handle_keydown = move |ev: ev::KeyboardEvent| {
         if ev.key() == " " || ev.key() == "Enter" {
             if !disabled.get() && !readonly.get() {
@@ -68,11 +73,7 @@ pub fn Checkbox(
             }
         }
     };
-    let label_val = label.clone();
-    let check_ind = indeterminate;
-    let check_val = checked;
-    let shape_val = shape;
-    let label_position_clone = label_position.clone();
+    let label_position_clone2 = label_position.clone();
     view! {
         <label
             class=move || format!("weui-checkbox {} {} {}", shape_class(), size_class(), class.get())
@@ -108,8 +109,8 @@ pub fn Checkbox(
                     <svg class="weui-icon weui-icon--xs" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
                 </Show>
             </span>
-            <Show when=move || label_position_clone.get() == CheckboxLabelPosition::Right>
-                <span class="weui-checkbox__label">{label_val.get()}</span>
+            <Show when=move || label_position_clone2.get() == CheckboxLabelPosition::Right>
+                <span class="weui-checkbox__label">{label_val2.get()}</span>
             </Show>
         </label>
     }
@@ -161,9 +162,12 @@ pub fn Radio(
         CheckboxSize::Large => "weui-radio--large",
     };
     let label_val = label.clone();
+    let label_val2 = label.clone();
+    let size_class_clone = size_class.clone();
+    let class_clone = class.clone();
     view! {
         <label
-            class=move || format!("weui-radio {} {}", size_class(), class.get())
+            class=move || format!("weui-radio {} {}", size_class_clone(), class_clone.get())
             class=("weui-radio--disabled", move || disabled.get())
             class=("weui-radio--checked", move || checked.get())
             style=style
@@ -179,7 +183,7 @@ pub fn Radio(
             />
             <span class="weui-radio__icon" aria-hidden="true"></span>
             <Show when=move || !label_val.get().is_empty()>
-                <span class="weui-radio__label">{label_val.get()}</span>
+                <span class="weui-radio__label">{label_val2.get()}</span>
             </Show>
         </label>
     }

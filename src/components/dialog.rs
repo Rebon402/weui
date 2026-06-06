@@ -158,12 +158,15 @@ pub fn DialogContainer() -> impl IntoView {
                     >
                         {move || dialog.current.get().map(|cfg| {
                             let cfg = cfg.clone();
+                            let title = cfg.title.clone();
+                            let has_title = !title.is_empty();
+                            let message = cfg.message.clone();
                             view! {
                                 <div class="weui-dialog__body">
-                                    <Show when=move || !cfg.title.is_empty()>
-                                        <div class="weui-dialog__title" id="dialog-title">{cfg.title.clone()}</div>
+                                    <Show when=move || has_title>
+                                        <div class="weui-dialog__title" id="dialog-title">{title.clone()}</div>
                                     </Show>
-                                    <div class="weui-dialog__content" id="dialog-content">{cfg.message.clone()}</div>
+                                    <div class="weui-dialog__content" id="dialog-content">{message.clone()}</div>
                                 </div>
                                 <div class="weui-dialog__actions">
                                     {cfg.actions.iter().map(|action| {

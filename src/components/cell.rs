@@ -31,6 +31,8 @@ pub fn Cell(
     let title_clone = title.clone();
     let icon_clone = icon.clone();
     let right_icon_clone = right_icon.clone();
+    let value_clone = value.clone();
+    let desc_clone = desc.clone();
     view! {
         <div
             class="weui-cell"
@@ -45,9 +47,9 @@ pub fn Cell(
             </Show>
             <div class="weui-cell__bd">
                 <div class="weui-cell__title">{title_clone}</div>
-                <div class="weui-cell__desc">{desc}</div>
+                <div class="weui-cell__desc">{desc_clone}</div>
             </div>
-            <div class="weui-cell__ft">{value}</div>
+            <div class="weui-cell__ft">{value_clone}</div>
             <Show when=move || !right_icon_clone.get().is_empty()>
                 <div class="weui-cell__ft"><super::icon::Icon name=super::icon::IconName::Arrow/></div>
             </Show>
@@ -60,11 +62,12 @@ pub fn CellGroup(
     #[prop(into, default = "".into())] title: MaybeSignal<String>,
     children: Children,
 ) -> impl IntoView {
-    let title_clone = title.clone();
+    let title_clone1 = title.clone();
+    let title_clone2 = title.clone();
     view! {
         <div class="weui-cells-wrap">
-            <Show when=move || !title_clone.get().is_empty()>
-                <div class="weui-cells__title">{title_clone.get()}</div>
+            <Show when=move || !title_clone1.get().is_empty()>
+                <div class="weui-cells__title">{title_clone2.get()}</div>
             </Show>
             <div class="weui-cells" role="list">
                 {children()}

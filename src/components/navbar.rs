@@ -19,16 +19,19 @@ pub fn Navbar(
     children: Children,
 ) -> impl IntoView {
     let class_clone = class.clone();
+    let back_text_clone = back_text.clone();
+    let back_text_clone2 = back_text.clone();
+    let title_clone = title.clone();
+    let title_clone2 = title.clone();
     let variant_class = move || match variant.get() {
         NavbarVariant::Default => "",
         NavbarVariant::Primary => "weui-navbar--primary",
         NavbarVariant::Transparent => "weui-navbar--transparent",
     };
-    let back_text_val = back_text.clone();
-    let title_clone = title.clone();
+    let variant_class_clone = variant_class.clone();
     view! {
         <nav
-            class=move || format!("weui-navbar {} {}", variant_class(), class_clone.get())
+            class=move || format!("weui-navbar {} {}", variant_class_clone(), class_clone.get())
             class=("weui-navbar--fixed", move || fixed.get())
             role="navigation"
         >
@@ -38,17 +41,18 @@ pub fn Navbar(
                         class="weui-navbar__back"
                         type="button"
                         aria-label="Go back"
+                        on:click=move |_| { if let Some(cb) = &on_back { cb.call(()) } }
                     >
                         <span class="weui-navbar__back-icon"/>
-                        <Show when=move || !back_text_val.get().is_empty()>
-                            <span>{back_text_val.get()}</span>
+                        <Show when=move || !back_text_clone.get().is_empty()>
+                            <span>{back_text_clone2.get()}</span>
                         </Show>
                     </button>
                 </div>
             </Show>
             <Show when=move || !title_clone.get().is_empty()>
                 <div class="weui-navbar__center">
-                    <span class="weui-navbar__title">{title_clone.get()}</span>
+                    <span class="weui-navbar__title">{title_clone2.get()}</span>
                 </div>
             </Show>
             <div class="weui-navbar__right">
