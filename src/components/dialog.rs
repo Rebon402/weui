@@ -156,25 +156,29 @@ pub fn DialogContainer() -> impl IntoView {
                         class=("weui-dialog--large", move || matches!(dialog.current.get().as_ref().map(|c| c.size), Some(DialogSize::Large)))
                         class=("weui-dialog--small", move || matches!(dialog.current.get().as_ref().map(|c| c.size), Some(DialogSize::Small)))
                     >
-                        {move || dialog.current.get().map(|cfg| view! {
-                            <div class="weui-dialog__body">
-                                <Show when=move || !cfg.title.is_empty()>
-                                    <div class="weui-dialog__title" id="dialog-title">{cfg.title.clone()}</div>
-                                </Show>
-                                <div class="weui-dialog__content" id="dialog-content">{cfg.message.clone()}</div>
-                            </div>
-                            <div class="weui-dialog__actions">
-                                {cfg.actions.iter().map(|action| {
-                                    view! {
-                                        <button
-                                            class="weui-dialog__action"
-                                            on:click=move |_| dialog.visible.set(false)
-                                        >
-                                            {action.label.clone()}
-                                        </button>
-                                    }
-                                }).collect::<Vec<_>>()}
-                            </div>
+                        {move || dialog.current.get().map(|cfg| {
+                            let cfg = cfg.clone();
+                            view! {
+                                <div class="weui-dialog__body">
+                                    <Show when=move || !cfg.title.is_empty()>
+                                        <div class="weui-dialog__title" id="dialog-title">{cfg.title.clone()}</div>
+                                    </Show>
+                                    <div class="weui-dialog__content" id="dialog-content">{cfg.message.clone()}</div>
+                                </div>
+                                <div class="weui-dialog__actions">
+                                    {cfg.actions.iter().map(|action| {
+                                        let action = action.clone();
+                                        view! {
+                                            <button
+                                                class="weui-dialog__action"
+                                                on:click=move |_| dialog.visible.set(false)
+                                            >
+                                                {action.label.clone()}
+                                            </button>
+                                        }
+                                    }).collect::<Vec<_>>()}
+                                </div>
+                            }
                         })}
                     </div>
                 </div>

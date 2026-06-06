@@ -18,7 +18,8 @@ pub fn SearchBar(
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
 ) -> impl IntoView {
     let input_ref = create_node_ref::<html::Input>();
-    let has_value = create_memo(move |_| !value.get().is_empty());
+    let value_clone = value.clone();
+    let has_value = create_memo(move |_| !value_clone.get().is_empty());
     let show_clear = create_memo(move |_| clearable.get() && has_value.get() && !disabled.get());
     create_effect(move |_| {
         if focus.get() {
@@ -48,7 +49,7 @@ pub fn SearchBar(
                 node_ref=input_ref
                 type="search"
                 class="weui-search__input"
-                prop:value=value
+                prop:value=value_clone
                 placeholder=placeholder
                 disabled=disabled
                 on:input=handle_input

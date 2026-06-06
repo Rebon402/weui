@@ -80,7 +80,8 @@ pub fn Input(
         on_input.call("".to_string());
         input_ref.get().map(|el| el.focus().ok());
     };
-    let label_val = label;
+    let label_val = label.clone();
+    let error_message_clone = error_message.clone();
     view! {
         <div
             class="weui-input-wrap"
@@ -96,7 +97,7 @@ pub fn Input(
                     type=type_attr
                     class=move || format!("weui-input {}", align_class())
                     class=("weui-input--error", move || error.get())
-                    prop:value=value
+                    prop:value=value.clone()
                     placeholder=placeholder
                     disabled=disabled
                     readonly=readonly
@@ -141,7 +142,9 @@ pub fn TextArea(
         let target = event_target::<web_sys::HtmlTextAreaElement>(&ev);
         on_input.call(target.value());
     };
-    let label_val = label;
+    let label_val = label.clone();
+    let error_message_clone = error_message.clone();
+    let value_clone = value.clone();
     view! {
         <div
             class="weui-textarea-wrap"
@@ -155,17 +158,17 @@ pub fn TextArea(
                 class=move || format!("weui-textarea {}", class.get())
                 class=("weui-textarea--error", move || error.get())
                 class=("weui-textarea--auto-height", move || auto_height.get())
-                prop:value=value
+                prop:value=value_clone
                 placeholder=placeholder
                 disabled=disabled
                 readonly=readonly
                 required=required
-                rows=move || if rows.get() > 0 { rows.get() } else { 3 }
+                rows=move || { if rows.get() > 0 { rows.get() } else { 3 } }
                 style=style
                 on:input=handle_input
             />
-            <Show when=move || error.get() && !error_message.get().is_empty()>
-                <div class="weui-textarea__error">{error_message.get()}</div>
+            <Show when=move || error.get() && !error_message_clone.get().is_empty()>
+                <div class="weui-textarea__error">{error_message_clone.get()}</div>
             </Show>
         </div>
     }

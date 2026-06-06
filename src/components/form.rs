@@ -56,7 +56,9 @@ pub fn FormField(
         ValidateStatus::Error => "weui-form-field--error",
         ValidateStatus::Validating => "weui-form-field--validating",
     };
-    let label_val = label;
+    let label_val = label.clone();
+    let error_message_clone = error_message.clone();
+    let help_text_clone = help_text.clone();
     view! {
         <div
             class=move || format!("weui-form-field {} {}", status_class(), class.get())
@@ -73,11 +75,11 @@ pub fn FormField(
             <div class="weui-form-field__control">
                 {children()}
             </div>
-            <Show when=move || !error_message.get().is_empty()>
-                <div class="weui-form-field__error">{error_message.get()}</div>
+            <Show when=move || !error_message_clone.get().is_empty()>
+                <div class="weui-form-field__error">{error_message_clone.get()}</div>
             </Show>
-            <Show when=move || error_message.get().is_empty() && !help_text.get().is_empty()>
-                <div class="weui-form-field__help">{help_text.get()}</div>
+            <Show when=move || error_message_clone.get().is_empty() && !help_text_clone.get().is_empty()>
+                <div class="weui-form-field__help">{help_text_clone.get()}</div>
             </Show>
         </div>
     }

@@ -43,12 +43,12 @@ pub fn Divider(
         TextAlign::Center => "",
         TextAlign::Right => "weui-divider--right",
     };
-    let has_text = move || !text.get().is_empty();
-    let text_val = text;
+    let text_val = text.clone();
+    let has_text = move || !text_val.get().is_empty();
     view! {
         <div
             class=move || format!("weui-divider {} {} {} {}", orientation_class(), stroke_class(), align_class(), class.get())
-            class=("weui-divider--with-text", has_text)
+            class=("weui-divider--with-text", has_text.clone())
             role="separator"
             style=style
         >

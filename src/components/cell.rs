@@ -28,6 +28,9 @@ pub fn Cell(
     #[prop(into, default = "".into())] right_icon: MaybeSignal<String>,
     #[prop(into, default = "".into())] _url: MaybeSignal<String>,
 ) -> impl IntoView {
+    let title_clone = title.clone();
+    let icon_clone = icon.clone();
+    let right_icon_clone = right_icon.clone();
     view! {
         <div
             class="weui-cell"
@@ -37,15 +40,15 @@ pub fn Cell(
             class=("weui-cell--access", move || is_link.get())
             class=("weui-cell--no-border", move || !border.get())
         >
-            <Show when=move || !icon.get().is_empty()>
+            <Show when=move || !icon_clone.get().is_empty()>
                 <div class="weui-cell__hd"><super::icon::Icon name=super::icon::IconName::Info size=crate::theme::Size::Md/></div>
             </Show>
             <div class="weui-cell__bd">
-                <div class="weui-cell__title">{title}</div>
+                <div class="weui-cell__title">{title_clone}</div>
                 <div class="weui-cell__desc">{desc}</div>
             </div>
             <div class="weui-cell__ft">{value}</div>
-            <Show when=move || !right_icon.get().is_empty()>
+            <Show when=move || !right_icon_clone.get().is_empty()>
                 <div class="weui-cell__ft"><super::icon::Icon name=super::icon::IconName::Arrow/></div>
             </Show>
         </div>
@@ -57,10 +60,11 @@ pub fn CellGroup(
     #[prop(into, default = "".into())] title: MaybeSignal<String>,
     children: Children,
 ) -> impl IntoView {
+    let title_clone = title.clone();
     view! {
         <div class="weui-cells-wrap">
-            <Show when=move || !title.get().is_empty()>
-                <div class="weui-cells__title">{title.get()}</div>
+            <Show when=move || !title_clone.get().is_empty()>
+                <div class="weui-cells__title">{title_clone.get()}</div>
             </Show>
             <div class="weui-cells" role="list">
                 {children()}

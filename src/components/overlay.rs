@@ -22,10 +22,11 @@ pub fn Overlay(
         OverlayColor::White => "weui-overlay--white",
         OverlayColor::Transparent => "weui-overlay--transparent",
     };
+    let class_clone = class.clone();
     view! {
         <Show when=move || visible.get()>
             <div
-                class=move || format!("weui-overlay {} {}", color_class(), class.get())
+                class=move || format!("weui-overlay {} {}", color_class(), class_clone.get())
                 class=("weui-overlay--blur", move || blur.get())
                 style=move || format!("opacity: {}; z-index: {};", opacity.get(), z_index.get())
                 aria-hidden="true"

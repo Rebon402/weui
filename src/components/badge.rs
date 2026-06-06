@@ -35,12 +35,14 @@ pub fn Badge(
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
     children: Children,
 ) -> impl IntoView {
+    let text_clone = text.clone();
+    let count_clone = count.clone();
     let is_dot = move || badge_type.get() == BadgeType::Dot;
     let content = move || match badge_type.get() {
-        BadgeType::Dot => "",
-        BadgeType::Count => &format!("{}", count.get()),
-        BadgeType::Text => text.get().as_str(),
-        BadgeType::Corner => text.get().as_str(),
+        BadgeType::Dot => "".to_string(),
+        BadgeType::Count => format!(" {}", count_clone.get()),
+        BadgeType::Text => text_clone.get(),
+        BadgeType::Corner => text_clone.get(),
     };
     view! {
         <span
@@ -54,7 +56,7 @@ pub fn Badge(
             class=("weui-badge--warning", move || variant.get() == BadgeVariant::Warning)
             class=("weui-badge--error", move || variant.get() == BadgeVariant::Error)
         >
-            {move || if is_dot() { view! {} } else { view! { <span class="weui-badge__content">{content()}</span> }} }
+            {move || if is_dot() { view! {}.into_view() } else { view! { <span class="weui-badge__content">{content()}</span> }.into_view() }}
             <span class="weui-badge__wrapper">
                 {children()}
             </span>

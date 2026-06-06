@@ -24,6 +24,6 @@ pub use components::spinner::{Spinner, Loading, SpinnerType, SpinnerSize};
 pub use components::switch::{Switch, Toggle, SwitchSize, SwitchVariant};
 pub use components::tag::{Tag, TagType, TagSize, TagVariant};
 pub use components::tabbar::{Tabbar, TabbarItemData, TabbarVariant};
-pub use components::toast::{ToastConfig, ToastController, ToastItem, ToastPosition, ToastProvider, ToastType, ToastCommand, provide_toast, use_toast};
+pub use components::toast::{ToastConfig, ToastController, ToastPosition, ToastProvider, ToastType, ToastCommand, provide_toast, use_toast};
 pub use theme::{Theme, ThemeContext, ThemeMode, ColorScheme, Breakpoint, Spacing, SemanticColor, Size, Direction, Position};
 pub use components::uploader::{Uploader, UploaderStatus, UploadFile, UploaderSize};

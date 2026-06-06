@@ -24,14 +24,16 @@ pub fn Picker(
     #[prop(into, default = "".into())] title: MaybeSignal<String>,
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
 ) -> impl IntoView {
+    let class_clone = class.clone();
+    let title_clone = title.clone();
     view! {
         <Show when=move || visible.get()>
-            <div class=move || format!("weui-picker {}", class.get())>
+            <div class=move || format!("weui-picker {}", class_clone.get())>
                 <div class="weui-picker__header">
                     <button class="weui-picker__btn" type="button">
                         "Cancel"
                     </button>
-                    <span class="weui-picker__title">{title.get()}</span>
+                    <span class="weui-picker__title">{title_clone.get()}</span>
                     <button class="weui-picker__btn weui-picker__btn--primary" type="button">
                         "Confirm"
                     </button>

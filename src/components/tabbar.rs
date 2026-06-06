@@ -52,21 +52,27 @@ pub fn TabbarItem(
     #[prop(into, default = None.into())] on_click: Option<Callback<String, ()>>,
 ) -> impl IntoView {
     let active = use_context::<ReadSignal<String>>();
+    let key_clone = key.clone();
     let is_active = create_memo(move |_| {
         if let Some(active_key) = active {
-            active_key.get() == key.get()
+            active_key.get() == key_clone.get()
         } else {
             false
         }
     });
     let handle_click = move |_: ev::MouseEvent| {
         if let Some(cb) = &on_click {
-            cb.call(key.get());
+            cb.call(key_clone.get());
         }
     };
+    let class_clone = class.clone();
+    let icon_clone = icon.clone();
+    let dot_clone = dot.clone();
+    let badge_clone = badge.clone();
+    let title_clone = title.clone();
     view! {
         <button
-            class=move || format!("weui-tabbar__item {}", class.get())
+            class=move || format!("weui-tabbar__item {}", class_clone.get())
             class=("weui-tabbar__item--active", move || is_active.get())
             on:click=handle_click
             type="button"
@@ -74,17 +80,17 @@ pub fn TabbarItem(
             aria-selected=move || is_active.get().to_string()
         >
             <span class="weui-tabbar__icon">
-                <Show when=move || !icon.get().is_empty()>
-                    <span class="weui-tabbar__icon-img">{icon.get()}</span>
+                <Show when=move || !icon_clone.get().is_empty()>
+                    <span class="weui-tabbar__icon-img">{icon_clone.get()}</span>
                 </Show>
-                <Show when=move || dot.get()>
+                <Show when=move || dot_clone.get()>
                     <span class="weui-tabbar__dot"/>
                 </Show>
-                <Show when=move || !dot.get() && !badge.get().is_empty()>
-                    <span class="weui-tabbar__badge">{badge.get()}</span>
+                <Show when=move || !dot_clone.get() && !badge_clone.get().is_empty()>
+                    <span class="weui-tabbar__badge">{badge_clone.get()}</span>
                 </Show>
             </span>
-            <span class="weui-tabbar__label">{title}</span>
+            <span class="weui-tabbar__label">{title_clone}</span>
         </button>
     }
 }

@@ -68,10 +68,11 @@ pub fn Checkbox(
             }
         }
     };
-    let label_val = label;
+    let label_val = label.clone();
     let check_ind = indeterminate;
     let check_val = checked;
     let shape_val = shape;
+    let label_position_clone = label_position.clone();
     view! {
         <label
             class=move || format!("weui-checkbox {} {} {}", shape_class(), size_class(), class.get())
@@ -81,7 +82,7 @@ pub fn Checkbox(
             style=style
             on:click=handle_click
         >
-            <Show when=move || label_position.get() == CheckboxLabelPosition::Left>
+            <Show when=move || label_position_clone.get() == CheckboxLabelPosition::Left>
                 <span class="weui-checkbox__label weui-checkbox__label--left">{label_val.get()}</span>
             </Show>
             <input
@@ -107,7 +108,7 @@ pub fn Checkbox(
                     <svg class="weui-icon weui-icon--xs" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
                 </Show>
             </span>
-            <Show when=move || label_position.get() == CheckboxLabelPosition::Right>
+            <Show when=move || label_position_clone.get() == CheckboxLabelPosition::Right>
                 <span class="weui-checkbox__label">{label_val.get()}</span>
             </Show>
         </label>
@@ -159,7 +160,7 @@ pub fn Radio(
         CheckboxSize::Medium => "",
         CheckboxSize::Large => "weui-radio--large",
     };
-    let label_val = label;
+    let label_val = label.clone();
     view! {
         <label
             class=move || format!("weui-radio {} {}", size_class(), class.get())

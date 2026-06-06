@@ -18,15 +18,17 @@ pub fn Navbar(
     #[prop(into, default = None.into())] on_back: Option<Callback<()>>,
     children: Children,
 ) -> impl IntoView {
+    let class_clone = class.clone();
     let variant_class = move || match variant.get() {
         NavbarVariant::Default => "",
         NavbarVariant::Primary => "weui-navbar--primary",
         NavbarVariant::Transparent => "weui-navbar--transparent",
     };
-    let back_text_val = back_text;
+    let back_text_val = back_text.clone();
+    let title_clone = title.clone();
     view! {
         <nav
-            class=move || format!("weui-navbar {} {}", variant_class(), class.get())
+            class=move || format!("weui-navbar {} {}", variant_class(), class_clone.get())
             class=("weui-navbar--fixed", move || fixed.get())
             role="navigation"
         >
@@ -44,9 +46,9 @@ pub fn Navbar(
                     </button>
                 </div>
             </Show>
-            <Show when=move || !title.get().is_empty()>
+            <Show when=move || !title_clone.get().is_empty()>
                 <div class="weui-navbar__center">
-                    <span class="weui-navbar__title">{title.get()}</span>
+                    <span class="weui-navbar__title">{title_clone.get()}</span>
                 </div>
             </Show>
             <div class="weui-navbar__right">

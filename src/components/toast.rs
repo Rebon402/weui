@@ -176,11 +176,11 @@ fn ToastView(
     view! {
         <div
             class="weui-toast"
-            class:weui-toast--default=move || config.toast_type == ToastType::Default
-            class:weui-toast--success=move || config.toast_type == ToastType::Success
-            class:weui-toast--error=move || config.toast_type == ToastType::Error
-            class:weui-toast--warn=move || config.toast_type == ToastType::Warn
-            class:weui-toast--loading=move || config.toast_type == ToastType::Loading
+            class=("weui-toast--default", move || config.toast_type == ToastType::Default)
+            class=("weui-toast--success", move || config.toast_type == ToastType::Success)
+            class=("weui-toast--error", move || config.toast_type == ToastType::Error)
+            class=("weui-toast--warn", move || config.toast_type == ToastType::Warn)
+            class=("weui-toast--loading", move || config.toast_type == ToastType::Loading)
             role="alert"
             aria-live="assertive"
             aria-atomic="true"

@@ -69,9 +69,11 @@ pub fn Uploader(
             cb.call(file);
         }
     };
+    let accept_clone = accept.clone();
+    let class_clone = class.clone();
     view! {
         <div
-            class=move || format!("weui-uploader {} {}", size_class(), class.get())
+            class=move || format!("weui-uploader {} {}", size_class(), class_clone.get())
             class=("weui-uploader--disabled", move || disabled.get())
         >
             <div class="weui-uploader__files">
@@ -93,12 +95,12 @@ pub fn Uploader(
                                     class=("weui-uploader__file--failed", matches!(file_status, UploaderStatus::Failed))
                                 >
                                     <Show when=move || file_url.is_some()>
-                                        <img class="weui-uploader__img" src=file_url.unwrap() alt=file_name.clone()/>
+                                        <img class="weui-uploader__img" src=move || file_url.clone().unwrap() alt=move || file_name.clone()/>
                                     </Show>
                                     <Show when=move || file_url.is_none()>
                                         <div class="weui-uploader__file-icon"/>
                                     </Show>
-                                    <span class="weui-uploader__name">{file_name}</span>
+                                    <span class="weui-uploader__name">{move || file_name.clone()}</span>
                                     <Show when=move || matches!(file_status, UploaderStatus::Uploading)>
                                         <div class="weui-uploader__progress">
                                             <div
@@ -128,7 +130,7 @@ pub fn Uploader(
                         node_ref=input_ref
                         type="file"
                         class="weui-uploader__input-native"
-                        accept=accept
+                        accept=accept_clone
                         multiple=multiple
                         disabled=disabled
                         on:change=handle_change
