@@ -34,11 +34,11 @@ pub fn Cell(
     view! {
         <div
             class="weui-cell"
-            class:weui-cell--large=move || size.get() == CellSize::Large
-            class:weui-cell--center=move || center.get()
-            class:weui-cell--clickable=move || clickable.get()
-            class:weui-cell--access=move || is_link.get()
-            class:weui-cell--no-border=move || !border.get()
+            class=("weui-cell--large", move || size.get() == CellSize::Large)
+            class=("weui-cell--center", move || center.get())
+            class=("weui-cell--clickable", move || clickable.get())
+            class=("weui-cell--access", move || is_link.get())
+            class=("weui-cell--no-border", move || !border.get())
         >
             {move || {
                 if !icon.get().is_empty() {

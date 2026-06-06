@@ -25,8 +25,8 @@ pub fn Picker(
     #[prop(into, default = false.into())] loading: MaybeSignal<bool>,
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
     #[prop(into, default = None.into())] on_confirm: Option<Callback<Vec<usize>>>,
-    #[prop(into, default = None.into())] on_cancel: Option<Callback<()>>,
-    #[prop(into, default = None.into())] on_change: Option<Callback<(usize, usize)>>,
+    #[prop(into, default = None.into())] on_cancel: Option<Callback<(), ()>>,
+    #[prop(into, default = None.into())] on_change: Option<Callback<(usize, usize), ()>>,
 ) -> impl IntoView {
     let selected_indices = create_memo(move |_| {
         columns
@@ -90,10 +90,10 @@ pub fn Picker(
 }
 
 #[component]
-fn PickerColumnView(
+pub fn PickerColumnView(
     column: PickerColumn,
     index: usize,
-    #[prop(into, default = None.into())] on_change: Option<Callback<(usize, usize)>>,
+    #[prop(into, default = None.into())] on_change: Option<Callback<(usize, usize), ()>>,
 ) -> impl IntoView {
     let current_index = create_rw_signal(column.default_index);
     let handle_scroll = move |ev: ev::Event| {
@@ -115,7 +115,7 @@ fn PickerColumnView(
                     view! {
                         <div
                             class="weui-picker__item"
-                            class:weui-picker__item--selected=is_selected
+                            class=("weui-picker__item--selected", is_selected)
                         >
                             {value}
                         </div>

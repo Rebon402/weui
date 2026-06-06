@@ -56,8 +56,8 @@ pub fn Badge(
     view! {
         <span
             class=move || format!("weui-badge {}", class.get())
-            class:weui-badge--dot=move || badge_type.get() == BadgeType::Dot
-            class:weui-badge--visible=move || visible.get()
+            class=("weui-badge--dot", move || badge_type.get() == BadgeType::Dot)
+            class=("weui-badge--visible", move || visible.get())
             class:variant_class=move || true
             class:size_class=move || true
         >

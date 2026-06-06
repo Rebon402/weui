@@ -16,9 +16,9 @@ pub fn SearchBar(
     #[prop(into, default = false.into())] disabled: MaybeSignal<bool>,
     #[prop(into, default = false.into())] focus: MaybeSignal<bool>,
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
-    #[prop(into, default = None.into())] on_search: Option<Callback<String>>,
-    #[prop(into, default = None.into())] on_cancel: Option<Callback<()>>,
-    #[prop(into, default = None.into())] on_clear: Option<Callback<()>>,
+    #[prop(into, default = None.into())] on_search: Option<Callback<String, ()>>,
+    #[prop(into, default = None.into())] on_cancel: Option<Callback<(), ()>>,
+    #[prop(into, default = None.into())] on_clear: Option<Callback<(), ()>>,
 ) -> impl IntoView {
     let input_ref = create_node_ref::<html::Input>();
     let has_value = create_memo(move |_| !value.get().is_empty());
@@ -59,8 +59,8 @@ pub fn SearchBar(
     view! {
         <div
             class=move || format!("weui-search {} {}", shape_class(), class.get())
-            class:weui-search--focus=move || focus.get()
-            class:weui-search--disabled=move || disabled.get()
+            class=("weui-search--focus", move || focus.get())
+            class=("weui-search--disabled", move || disabled.get())
         >
             <div class="weui-search__icon"/>
             <input

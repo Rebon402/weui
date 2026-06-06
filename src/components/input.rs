@@ -103,9 +103,9 @@ pub fn Input(
     view! {
         <div
             class="weui-input-wrap"
-            class:weui-input-wrap--error=move || error.get()
-            class:weui-input-wrap--disabled=move || disabled.get()
-            class:weui-input-wrap--readonly=move || readonly.get()
+            class=("weui-input-wrap--error", move || error.get())
+            class=("weui-input-wrap--disabled", move || disabled.get())
+            class=("weui-input-wrap--readonly", move || readonly.get())
         >
             {move || {
                 if !label.get().is_empty() {
@@ -128,8 +128,8 @@ pub fn Input(
                     node_ref=input_ref
                     type=type_attr
                     class=move || format!("weui-input {} {}", align_class(), class.get())
-                    class:weui-input--error=move || error.get()
-                    class:weui-input--disabled=move || disabled.get()
+                    class=("weui-input--error", move || error.get())
+                    class=("weui-input--disabled", move || disabled.get())
                     prop:value=value
                     placeholder=placeholder
                     disabled=disabled
@@ -205,8 +205,8 @@ pub fn TextArea(
     view! {
         <div
             class="weui-textarea-wrap"
-            class:weui-textarea-wrap--error=move || error.get()
-            class:weui-textarea-wrap--disabled=move || disabled.get()
+            class=("weui-textarea-wrap--error", move || error.get())
+            class=("weui-textarea-wrap--disabled", move || disabled.get())
         >
             {move || {
                 if !label.get().is_empty() {
@@ -217,8 +217,8 @@ pub fn TextArea(
             }}
             <textarea
                 class=move || format!("weui-textarea {}", class.get())
-                class:weui-textarea--error=move || error.get()
-                class:weui-textarea--auto-height=move || auto_height.get()
+                class=("weui-textarea--error", move || error.get())
+                class=("weui-textarea--auto-height", move || auto_height.get())
                 prop:value=value
                 placeholder=placeholder
                 disabled=disabled

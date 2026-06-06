@@ -25,7 +25,7 @@ pub fn Switch(
     #[prop(into, default = "".into())] active_text: MaybeSignal<String>,
     #[prop(into, default = "".into())] inactive_text: MaybeSignal<String>,
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
-    #[prop(into, default = None.into())] on_click: Option<Callback<ev::MouseEvent>>,
+    #[prop(into, default = None.into())] on_click: Option<Callback<ev::MouseEvent, ()>>,
 ) -> impl IntoView {
     let size_class = move || match size.get() {
         SwitchSize::Sm => "weui-switch--sm",
@@ -50,9 +50,9 @@ pub fn Switch(
     view! {
         <button
             class=move || format!("weui-switch {} {} {}", size_class(), variant_class(), class.get())
-            class:weui-switch--checked=move || checked.get()
-            class:weui-switch--disabled=move || disabled.get()
-            class:weui-switch--loading=move || loading.get()
+            class=("weui-switch--checked", move || checked.get())
+            class=("weui-switch--disabled", move || disabled.get())
+            class=("weui-switch--loading", move || loading.get())
             on:click=handle_click
             type="button"
             role="switch"

@@ -15,7 +15,7 @@ pub fn Navbar(
     #[prop(into, default = "".into())] back_text: MaybeSignal<String>,
     #[prop(into, default = false.into())] fixed: MaybeSignal<bool>,
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
-    #[prop(into, default = None.into())] on_back: Option<Callback<()>>,
+    #[prop(into, default = None.into())] on_back: Option<Callback<(), ()>>,
     children: ChildrenFn,
 ) -> impl IntoView {
     let variant_class = move || match variant.get() {
@@ -31,7 +31,7 @@ pub fn Navbar(
     view! {
         <nav
             class=move || format!("weui-navbar {} {}", variant_class(), class.get())
-            class:weui-navbar--fixed=move || fixed.get()
+            class=("weui-navbar--fixed", move || fixed.get())
             role="navigation"
         >
             {move || {

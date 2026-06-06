@@ -54,8 +54,8 @@ pub fn Form(
     view! {
         <form
             class=move || format!("weui-form {} {}", layout_class(), class.get())
-            class:weui-form--disabled=move || disabled.get()
-            class:weui-form--readonly=move || readonly.get()
+            class=("weui-form--disabled", move || disabled.get())
+            class=("weui-form--readonly", move || readonly.get())
             novalidate="true"
         >
             {children()}
@@ -83,7 +83,7 @@ pub fn FormField(
     view! {
         <div
             class=move || format!("weui-form-field {} {}", status_class(), class.get())
-            class:weui-form-field--required=move || required.get()
+            class=("weui-form-field--required", move || required.get())
         >
             {move || {
                 if !label.get().is_empty() {

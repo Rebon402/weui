@@ -47,7 +47,7 @@ pub fn Divider(
     view! {
         <div
             class=move || format!("weui-divider {} {} {} {}", orientation_class(), stroke_class(), align_class(), class.get())
-            class:weui-divider--with-text=has_text
+            class=("weui-divider--with-text", has_text)
             role="separator"
             style=style
         >

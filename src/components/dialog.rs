@@ -1,4 +1,4 @@
-use super::button::{Button, ButtonVariant, ButtonSize};
+use super::button::{ButtonVariant, ButtonSize};
 use super::icon::{Icon, IconName};
 use crate::theme::Size;
 use leptos::*;
@@ -21,7 +21,7 @@ pub enum DialogType {
 pub struct DialogAction {
     pub label: String,
     pub variant: ButtonVariant,
-    pub callback: Option<Callback<()>>,
+    pub callback: Option<Callback<(), ()>>,
 }
 
 impl DialogAction {
@@ -44,12 +44,12 @@ impl DialogAction {
     }
 
     pub fn on_action<F: Fn() + 'static>(mut self, f: F) -> Self {
-        self.callback = Some(Callback::new(f));
+        self.callback = Some(Callback::new(move |()| f()));
         self
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct DialogConfig {
     pub title: String,
     pub message: String,
@@ -133,11 +133,9 @@ pub struct DialogController {
 pub fn DialogContainer() -> impl IntoView {
     let dialog = use_context::<DialogController>()
         .expect("DialogController not found");
-    let config_memo = create_memo(move |_| dialog.current.get());
-    let visible_memo = create_memo(move |_| dialog.visible.get());
     view! {
-        <Show when=move || visible_memo.get()>
-            <DialogView config=config_memo.into() visible=dialog.visible/>
+        <Show when=move || dialog.visible.get()>
+            <DialogView config=dialog.current.into() visible=dialog.visible/>
         </Show>
     }
 }
@@ -169,7 +167,7 @@ fn DialogView(
     view! {
         <div
             class="weui-dialog-overlay"
-            class:weui-dialog-overlay--visible=move || visible.get()
+            class=("weui-dialog-overlay--visible", move || visible.get())
             on:click=handle_overlay_click
             on:keydown=handle_keydown
             tabindex="-1"
@@ -180,8 +178,8 @@ fn DialogView(
         >
             <div
                 class="weui-dialog"
-                class:weui-dialog--large=move || matches!(config.get().as_ref().map(|c| c.size), Some(DialogSize::Large))
-                class:weui-dialog--small=move || matches!(config.get().as_ref().map(|c| c.size), Some(DialogSize::Small))
+                class=("weui-dialog--large", move || matches!(config.get().as_ref().map(|c| c.size), Some(DialogSize::Large)))
+                class=("weui-dialog--small", move || matches!(config.get().as_ref().map(|c| c.size), Some(DialogSize::Small)))
                 node_ref=dialog_ref
             >
                 {move || config.get().map(|cfg| view! {

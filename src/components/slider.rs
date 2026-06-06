@@ -18,8 +18,8 @@ pub fn Slider(
     #[prop(into, default = false.into())] show_value: MaybeSignal<bool>,
     #[prop(into, default = false.into())] reverse: MaybeSignal<bool>,
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
-    #[prop(into, default = None.into())] on_start: Option<Callback<()>>,
-    #[prop(into, default = None.into())] on_end: Option<Callback<f64>>,
+    #[prop(into, default = None.into())] on_start: Option<Callback<(), ()>>,
+    #[prop(into, default = None.into())] on_end: Option<Callback<f64, ()>>,
 ) -> impl IntoView {
     let percentage = create_memo(move |_| {
         let min_val = min.get();
@@ -53,8 +53,8 @@ pub fn Slider(
     view! {
         <div
             class=move || format!("weui-slider {} {}", orientation_class(), class.get())
-            class:weui-slider--disabled=move || disabled.get()
-            class:weui-slider--reverse=move || reverse.get()
+            class=("weui-slider--disabled", move || disabled.get())
+            class=("weui-slider--reverse", move || reverse.get())
             role="slider"
             aria-valuemin=move || min.get()
             aria-valuemax=move || max.get()

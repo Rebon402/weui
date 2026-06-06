@@ -72,9 +72,9 @@ pub fn Checkbox(
     view! {
         <label
             class=move || format!("weui-checkbox {} {} {}", shape_class(), size_class(), class.get())
-            class:weui-checkbox--disabled=move || disabled.get()
-            class:weui-checkbox--checked=move || checked.get()
-            class:weui-checkbox--indeterminate=move || indeterminate.get()
+            class=("weui-checkbox--disabled", move || disabled.get())
+            class=("weui-checkbox--checked", move || checked.get())
+            class=("weui-checkbox--indeterminate", move || indeterminate.get())
             style=style
             on:click=handle_click
         >
@@ -133,9 +133,9 @@ pub fn CheckboxGroup(
     view! {
         <div
             class="weui-checkbox-group"
-            class:weui-checkbox-group--vertical=move || direction.get() == CheckboxDirection::Vertical
-            class:weui-checkbox-group--horizontal=move || direction.get() == CheckboxDirection::Horizontal
-            class:weui-checkbox-group--disabled=move || disabled.get()
+            class=("weui-checkbox-group--vertical", move || direction.get() == CheckboxDirection::Vertical)
+            class=("weui-checkbox-group--horizontal", move || direction.get() == CheckboxDirection::Horizontal)
+            class=("weui-checkbox-group--disabled", move || disabled.get())
             role="group"
         >
             {children()}
@@ -176,8 +176,8 @@ pub fn Radio(
     view! {
         <label
             class=move || format!("weui-radio {} {}", size_class(), class.get())
-            class:weui-radio--disabled=move || disabled.get()
-            class:weui-radio--checked=move || checked.get()
+            class=("weui-radio--disabled", move || disabled.get())
+            class=("weui-radio--checked", move || checked.get())
             style=style
             on:click=handle_click
         >

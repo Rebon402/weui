@@ -25,8 +25,8 @@ pub fn Popup(
     #[prop(into, default = false.into())] round: MaybeSignal<bool>,
     #[prop(into, default = false.into())] safe_area: MaybeSignal<bool>,
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
-    #[prop(into, default = None.into())] on_close: Option<Callback<()>>,
-    #[prop(into, default = None.into())] on_mask_click: Option<Callback<ev::MouseEvent>>,
+    #[prop(into, default = None.into())] on_close: Option<Callback<(), ()>>,
+    #[prop(into, default = None.into())] on_mask_click: Option<Callback<ev::MouseEvent, ()>>,
     children: Children,
 ) -> impl IntoView {
     let position_class = move || match position.get() {
@@ -60,8 +60,8 @@ pub fn Popup(
                 />
                 <div
                     class=move || format!("weui-popup {} {}", position_class(), animation_class(), class.get())
-                    class:weui-popup--round=move || round.get()
-                    class:weui-popup--safe-area=move || safe_area.get()
+                    class=("weui-popup--round", move || round.get())
+                    class=("weui-popup--safe-area", move || safe_area.get())
                     role="dialog"
                     aria-modal="true"
                 >

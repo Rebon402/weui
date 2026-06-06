@@ -88,7 +88,7 @@ pub fn Loading(
         <Show when=move || visible.get()>
             <div
                 class=move || format!("weui-loading {}", class.get())
-                class:weui-loading--fullscreen=move || fullscreen.get()
+                class=("weui-loading--fullscreen", move || fullscreen.get())
             >
                 <Spinner spinner_type=spinner_type size=size/>
                 {move || {
