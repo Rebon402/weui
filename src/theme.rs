@@ -1,5 +1,6 @@
 use leptos::*;
 
+/// Core theme values for a WeUI-based application.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Theme {
     pub primary: String,

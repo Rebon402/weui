@@ -1,5 +1,28 @@
+//! WeUI is a Rust-first UI utility crate for generating modern HTML/CSS pages and providing Leptos-compatible theme utilities.
+//!
+//! This crate exposes embedded theme assets, HTML page generation helpers, and a collection of Leptos-ready components.
+//!
+//! # Examples
+//!
+//! ```rust
+//! use weui::{html_page, theme_css};
+//!
+//! let html = html_page(
+//!     "WeUI Example",
+//!     "<div class=\"weui-example\">Hello WeUI!</div>",
+//!     theme_css(),
+//! );
+//!
+//! assert!(html.contains("<style>"));
+//! ```
+
 pub mod components;
 pub mod theme;
+pub mod styles;
+pub mod utils;
+
+pub use styles::*;
+pub use utils::*;
 
 pub use components::actionsheet::{ActionSheetAction, ActionSheetConfig, ActionSheetController, ActionSheetProvider, provide_actionsheet, use_actionsheet};
 pub use components::badge::{Badge, BadgeType, BadgeVariant};

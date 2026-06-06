@@ -3,9 +3,14 @@ name = "weui"
 version = "0.1.0"
 authors = ["Rebon402"]
 edition = "2024"
-
-[lib]
-crate-type = ["cdylib", "rlib"]
+description = "A Rust-driven WeUI utility crate for generating HTML, CSS, and Leptos-friendly UI themes."
+readme = "README.md"
+license = "Apache-2.0"
+repository = "https://github.com/Rebon402/weui"
+homepage = "https://github.com/Rebon402/weui"
+documentation = "https://docs.rs/weui"
+keywords = ["weui", "rust", "leptos", "html", "css", "ui", "web"]
+categories = ["web-programming"]
 
 [features]
 default = ["hydrate"]
@@ -13,7 +18,7 @@ hydrate = ["leptos/hydrate"]
 ssr = ["leptos/ssr"]
 
 [dependencies]
-leptos = { version = "0.6", features = ["nightly"] }
+leptos = { version = "0.6", features = ["nightly", "ssr"] }
 leptos_meta = { version = "0.6" }
 leptos_router = { version = "0.6" }
 wasm-bindgen = "0.2"
