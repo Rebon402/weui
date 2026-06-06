@@ -34,19 +34,12 @@ pub fn Overlay(
             }
         }
     };
-    let overlay_style = move || {
-        format!(
-            "opacity: {}; z-index: {};",
-            opacity.get(),
-            z_index.get()
-        )
-    };
     view! {
         <Show when=move || visible.get()>
             <div
                 class=move || format!("weui-overlay {} {}", color_class(), class.get())
                 class=("weui-overlay--blur", move || blur.get())
-                style=overlay_style
+                style=move || format!("opacity: {}; z-index: {};", opacity.get(), z_index.get())
                 on:click=handle_click
                 aria-hidden="true"
             />

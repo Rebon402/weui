@@ -85,36 +85,23 @@ pub fn FormField(
             class=move || format!("weui-form-field {} {}", status_class(), class.get())
             class=("weui-form-field--required", move || required.get())
         >
-            {move || {
-                if !label.get().is_empty() {
-                    view! {
-                        <label class="weui-form-field__label">
-                            {label.get()}
-                            {move || {
-                                if required.get() {
-                                    view! { <span class="weui-form-field__required">*</span> }
-                                } else {
-                                    view! {}
-                                }
-                            }}
-                        </label>
-                    }
-                } else {
-                    view! {}
-                }
-            }}
+            <Show when=move || !label.get().is_empty()>
+                <label class="weui-form-field__label">
+                    {label.get()}
+                    <Show when=move || required.get()>
+                        <span class="weui-form-field__required">*</span>
+                    </Show>
+                </label>
+            </Show>
             <div class="weui-form-field__control">
                 {children()}
             </div>
-            {move || {
-                if !error_message.get().is_empty() {
-                    view! { <div class="weui-form-field__error">{error_message.get()}</div> }
-                } else if !help_text.get().is_empty() {
-                    view! { <div class="weui-form-field__help">{help_text.get()}</div> }
-                } else {
-                    view! {}
-                }
-            }}
+            <Show when=move || !error_message.get().is_empty()>
+                <div class="weui-form-field__error">{error_message.get()}</div>
+            </Show>
+            <Show when=move || error_message.get().is_empty() && !help_text.get().is_empty()>
+                <div class="weui-form-field__help">{help_text.get()}</div>
+            </Show>
         </div>
     }
 }

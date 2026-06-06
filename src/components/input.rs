@@ -107,23 +107,13 @@ pub fn Input(
             class=("weui-input-wrap--disabled", move || disabled.get())
             class=("weui-input-wrap--readonly", move || readonly.get())
         >
-            {move || {
-                if !label.get().is_empty() {
-                    view! {
-                        <label class="weui-input__label">{label.get()}</label>
-                    }
-                } else {
-                    view! {}
-                }
-            }}
+            <Show when=move || !label.get().is_empty()>
+                <label class="weui-input__label">{label.get()}</label>
+            </Show>
             <div class="weui-input__container">
-                {move || {
-                    if !icon_left.get().is_empty() {
-                        view! { <span class="weui-input__icon-left"><Icon name=IconName::Search/></span> }
-                    } else {
-                        view! {}
-                    }
-                }}
+                <Show when=move || !icon_left.get().is_empty()>
+                    <span class="weui-input__icon-left"><Icon name=IconName::Search/></span>
+                </Show>
                 <input
                     node_ref=input_ref
                     type=type_attr
@@ -146,37 +136,23 @@ pub fn Input(
                     on:focus=handle_focus
                     on:blur=handle_blur
                 />
-                {move || {
-                    if show_clear() {
-                        view! {
-                            <button
-                                class="weui-input__clear"
-                                on:click=handle_clear
-                                type="button"
-                                aria-label="Clear input"
-                            >
-                                <Icon name=IconName::Clear size=Size::Sm/>
-                            </button>
-                        }
-                    } else {
-                        view! {}
-                    }
-                }}
-                {move || {
-                    if !icon_right.get().is_empty() {
-                        view! { <span class="weui-input__icon-right"><Icon name=IconName::Search/></span> }
-                    } else {
-                        view! {}
-                    }
-                }}
+                <Show when=move || show_clear()>
+                    <button
+                        class="weui-input__clear"
+                        on:click=handle_clear
+                        type="button"
+                        aria-label="Clear input"
+                    >
+                        <Icon name=IconName::Clear size=Size::Sm/>
+                    </button>
+                </Show>
+                <Show when=move || !icon_right.get().is_empty()>
+                    <span class="weui-input__icon-right"><Icon name=IconName::Search/></span>
+                </Show>
             </div>
-            {move || {
-                if error.get() && !error_message.get().is_empty() {
-                    view! { <div class="weui-input__error">{error_message.get()}</div> }
-                } else {
-                    view! {}
-                }
-            }}
+            <Show when=move || error.get() && !error_message.get().is_empty()>
+                <div class="weui-input__error">{error_message.get()}</div>
+            </Show>
         </div>
     }
 }
@@ -208,13 +184,9 @@ pub fn TextArea(
             class=("weui-textarea-wrap--error", move || error.get())
             class=("weui-textarea-wrap--disabled", move || disabled.get())
         >
-            {move || {
-                if !label.get().is_empty() {
-                    view! { <label class="weui-textarea__label">{label.get()}</label> }
-                } else {
-                    view! {}
-                }
-            }}
+            <Show when=move || !label.get().is_empty()>
+                <label class="weui-textarea__label">{label.get()}</label>
+            </Show>
             <textarea
                 class=move || format!("weui-textarea {}", class.get())
                 class=("weui-textarea--error", move || error.get())
@@ -229,24 +201,14 @@ pub fn TextArea(
                 style=style
                 on:input=handle_input
             />
-            {move || {
-                if max_length.get() > 0 {
-                    view! {
-                        <div class="weui-textarea__counter">
-                            {move || format!("{}/{}", value.get().len(), max_length.get())}
-                        </div>
-                    }
-                } else {
-                    view! {}
-                }
-            }}
-            {move || {
-                if error.get() && !error_message.get().is_empty() {
-                    view! { <div class="weui-textarea__error">{error_message.get()}</div> }
-                } else {
-                    view! {}
-                }
-            }}
+            <Show when=move || max_length.get() > 0>
+                <div class="weui-textarea__counter">
+                    {move || format!("{}/{}", value.get().len(), max_length.get())}
+                </div>
+            </Show>
+            <Show when=move || error.get() && !error_message.get().is_empty()>
+                <div class="weui-textarea__error">{error_message.get()}</div>
+            </Show>
         </div>
     }
 }

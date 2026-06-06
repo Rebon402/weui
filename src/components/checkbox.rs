@@ -78,13 +78,9 @@ pub fn Checkbox(
             style=style
             on:click=handle_click
         >
-            {move || {
-                if label_position.get() == CheckboxLabelPosition::Left {
-                    view! { <span class="weui-checkbox__label weui-checkbox__label--left">{label.get()}</span> }
-                } else {
-                    view! {}
-                }
-            }}
+            <Show when=move || label_position.get() == CheckboxLabelPosition::Left>
+                <span class="weui-checkbox__label weui-checkbox__label--left">{label.get()}</span>
+            </Show>
             <input
                 node_ref=input_ref
                 type="checkbox"
@@ -98,25 +94,19 @@ pub fn Checkbox(
                 on:keydown=handle_keydown
             />
             <span class="weui-checkbox__icon" aria-hidden="true">
-                {move || {
-                    if indeterminate.get() {
-                        view! { <Icon name=IconName::Minus size=Size::Sm/> }
-                    } else if checked.get() {
-                        view! { <Icon name=IconName::Check size=Size::Sm/> }
-                    } else if shape.get() == CheckboxShape::Round {
-                        view! { <Icon name=IconName::Circle size=Size::Xs/> }
-                    } else {
-                        view! {}
-                    }
-                }}
+                <Show when=move || indeterminate.get()>
+                    <Icon name=IconName::Minus size=Size::Sm/>
+                </Show>
+                <Show when=move || !indeterminate.get() && checked.get()>
+                    <Icon name=IconName::Check size=Size::Sm/>
+                </Show>
+                <Show when=move || !indeterminate.get() && !checked.get() && shape.get() == CheckboxShape::Round>
+                    <Icon name=IconName::Circle size=Size::Xs/>
+                </Show>
             </span>
-            {move || {
-                if label_position.get() == CheckboxLabelPosition::Right {
-                    view! { <span class="weui-checkbox__label">{label.get()}</span> }
-                } else {
-                    view! {}
-                }
-            }}
+            <Show when=move || label_position.get() == CheckboxLabelPosition::Right>
+                <span class="weui-checkbox__label">{label.get()}</span>
+            </Show>
         </label>
     }
 }
@@ -191,13 +181,9 @@ pub fn Radio(
                 hidden=true
             />
             <span class="weui-radio__icon" aria-hidden="true"></span>
-            {move || {
-                if label.get().is_empty() {
-                    view! {}
-                } else {
-                    view! { <span class="weui-radio__label">{label.get()}</span> }
-                }
-            }}
+            <Show when=move || !label.get().is_empty()>
+                <span class="weui-radio__label">{label.get()}</span>
+            </Show>
         </label>
     }
 }

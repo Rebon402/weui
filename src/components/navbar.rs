@@ -34,42 +34,26 @@ pub fn Navbar(
             class=("weui-navbar--fixed", move || fixed.get())
             role="navigation"
         >
-            {move || {
-                if show_back.get() {
-                    Some(view! {
-                        <div class="weui-navbar__left">
-                            <button
-                                class="weui-navbar__back"
-                                on:click=handle_back
-                                type="button"
-                                aria-label="Go back"
-                            >
-                                <span class="weui-navbar__back-icon"/>
-                                {move || {
-                                    if !back_text.get().is_empty() {
-                                        view! { <span>{back_text.get()}</span> }
-                                    } else {
-                                        view! { <></> }
-                                    }
-                                }}
-                            </button>
-                        </div>
-                    })
-                } else {
-                    None
-                }
-            }}
-            {move || {
-                if !title.get().is_empty() {
-                    Some(view! {
-                        <div class="weui-navbar__center">
-                            <span class="weui-navbar__title">{title.get()}</span>
-                        </div>
-                    })
-                } else {
-                    None
-                }
-            }}
+            <Show when=move || show_back.get()>
+                <div class="weui-navbar__left">
+                    <button
+                        class="weui-navbar__back"
+                        on:click=handle_back
+                        type="button"
+                        aria-label="Go back"
+                    >
+                        <span class="weui-navbar__back-icon"/>
+                        <Show when=move || !back_text.get().is_empty()>
+                            <span>{back_text.get()}</span>
+                        </Show>
+                    </button>
+                </div>
+            </Show>
+            <Show when=move || !title.get().is_empty()>
+                <div class="weui-navbar__center">
+                    <span class="weui-navbar__title">{title.get()}</span>
+                </div>
+            </Show>
             <div class="weui-navbar__right">
                 {children()}
             </div>
