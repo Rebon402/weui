@@ -64,7 +64,7 @@ pub fn Grid(
     };
     view! {
         <div
-            class=move || format!("weui-grid {} {} {}", direction_class(), align_class(), justify_class(), class.get())
+            class=move || format!("weui-grid {} {} {} {}", direction_class(), align_class(), justify_class(), class.get())
             class=("weui-grid--square", move || square.get())
             style=move || format!("{} {}", grid_style(), style.get())
             role="grid"

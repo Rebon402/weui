@@ -25,8 +25,6 @@ pub fn Popup(
     #[prop(into, default = false.into())] round: MaybeSignal<bool>,
     #[prop(into, default = false.into())] safe_area: MaybeSignal<bool>,
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
-    #[prop(into, default = None.into())] on_close: Option<Callback<(), ()>>,
-    #[prop(into, default = None.into())] on_mask_click: Option<Callback<ev::MouseEvent, ()>>,
     children: Children,
 ) -> impl IntoView {
     let position_class = move || match position.get() {
@@ -41,25 +39,12 @@ pub fn Popup(
         PopupAnimation::Fade => "weui-popup--fade",
         PopupAnimation::None => "",
     };
-    let handle_mask_click = move |ev: ev::MouseEvent| {
-        if let Some(cb) = &on_mask_click {
-            cb.call(ev);
-        }
-        if close_on_mask.get() {
-            if let Some(cb) = &on_close {
-                cb.call(());
-            }
-        }
-    };
     view! {
         <Show when=move || visible.get()>
             <div class="weui-popup__wrapper">
+                <div class="weui-popup__mask"/>
                 <div
-                    class="weui-popup__mask"
-                    on:click=handle_mask_click
-                />
-                <div
-                    class=move || format!("weui-popup {} {}", position_class(), animation_class(), class.get())
+                    class=move || format!("weui-popup {} {} {}", position_class(), animation_class(), class.get())
                     class=("weui-popup--round", move || round.get())
                     class=("weui-popup--safe-area", move || safe_area.get())
                     role="dialog"

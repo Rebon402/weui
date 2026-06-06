@@ -1,5 +1,3 @@
-use super::icon::{Icon, IconName};
-use crate::theme::Size;
 use leptos::*;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -38,6 +36,7 @@ pub fn Checkbox(
     #[prop(into, default = "".into())] value: MaybeSignal<String>,
 ) -> impl IntoView {
     let input_ref = create_node_ref::<html::Input>();
+    let label_pos = label_position;
     let handle_change = move |ev: ev::Event| {
         if disabled.get() || readonly.get() {
             ev.prevent_default();
@@ -47,7 +46,7 @@ pub fn Checkbox(
         on_change.call(target.checked());
     };
     let handle_click = move |ev: ev::MouseEvent| {
-        if label_position.get() == CheckboxLabelPosition::Left {
+        if label_pos.get() == CheckboxLabelPosition::Left {
             ev.prevent_default();
             input_ref.get().map(|el| el.click());
         }
@@ -69,6 +68,10 @@ pub fn Checkbox(
             }
         }
     };
+    let label_val = label;
+    let check_ind = indeterminate;
+    let check_val = checked;
+    let shape_val = shape;
     view! {
         <label
             class=move || format!("weui-checkbox {} {} {}", shape_class(), size_class(), class.get())
@@ -79,7 +82,7 @@ pub fn Checkbox(
             on:click=handle_click
         >
             <Show when=move || label_position.get() == CheckboxLabelPosition::Left>
-                <span class="weui-checkbox__label weui-checkbox__label--left">{label.get()}</span>
+                <span class="weui-checkbox__label weui-checkbox__label--left">{label_val.get()}</span>
             </Show>
             <input
                 node_ref=input_ref
@@ -94,18 +97,18 @@ pub fn Checkbox(
                 on:keydown=handle_keydown
             />
             <span class="weui-checkbox__icon" aria-hidden="true">
-                <Show when=move || indeterminate.get()>
-                    <Icon name=IconName::Minus size=Size::Sm/>
+                <Show when=move || check_ind.get()>
+                    <svg class="weui-icon weui-icon--xs" viewBox="0 0 24 24"><path d="M19 13H5v-2h14v2z"/></svg>
                 </Show>
-                <Show when=move || !indeterminate.get() && checked.get()>
-                    <Icon name=IconName::Check size=Size::Sm/>
+                <Show when=move || !check_ind.get() && check_val.get()>
+                    <svg class="weui-icon weui-icon--xs" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
                 </Show>
-                <Show when=move || !indeterminate.get() && !checked.get() && shape.get() == CheckboxShape::Round>
-                    <Icon name=IconName::Circle size=Size::Xs/>
+                <Show when=move || !check_ind.get() && !check_val.get() && shape_val.get() == CheckboxShape::Round>
+                    <svg class="weui-icon weui-icon--xs" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
                 </Show>
             </span>
             <Show when=move || label_position.get() == CheckboxLabelPosition::Right>
-                <span class="weui-checkbox__label">{label.get()}</span>
+                <span class="weui-checkbox__label">{label_val.get()}</span>
             </Show>
         </label>
     }
@@ -151,25 +154,18 @@ pub fn Radio(
     #[prop(into, default = "".into())] name: MaybeSignal<String>,
     #[prop(into, default = "".into())] value: MaybeSignal<String>,
 ) -> impl IntoView {
-    let handle_click = move |ev: ev::MouseEvent| {
-        if disabled.get() {
-            ev.prevent_default();
-            return;
-        }
-        on_change.call(!checked.get());
-    };
     let size_class = move || match size.get() {
         CheckboxSize::Small => "weui-radio--small",
         CheckboxSize::Medium => "",
         CheckboxSize::Large => "weui-radio--large",
     };
+    let label_val = label;
     view! {
         <label
             class=move || format!("weui-radio {} {}", size_class(), class.get())
             class=("weui-radio--disabled", move || disabled.get())
             class=("weui-radio--checked", move || checked.get())
             style=style
-            on:click=handle_click
         >
             <input
                 type="radio"
@@ -181,8 +177,8 @@ pub fn Radio(
                 hidden=true
             />
             <span class="weui-radio__icon" aria-hidden="true"></span>
-            <Show when=move || !label.get().is_empty()>
-                <span class="weui-radio__label">{label.get()}</span>
+            <Show when=move || !label_val.get().is_empty()>
+                <span class="weui-radio__label">{label_val.get()}</span>
             </Show>
         </label>
     }

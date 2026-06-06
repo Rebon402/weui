@@ -72,13 +72,9 @@ pub fn Button(
             aria-busy=move || loading.get().to_string()
             on:click=handle_click
         >
-            {move || {
-                if loading.get() {
-                    view! { <span class="weui-loading"/> }
-                } else {
-                    view! {}
-                }
-            }}
+            <Show when=move || loading.get()>
+                <span class="weui-loading"/>
+            </Show>
             <span class="weui-btn__text">{text}</span>
         </button>
     }

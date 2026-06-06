@@ -1,5 +1,3 @@
-use super::icon::{Icon, IconName};
-use crate::theme::Size;
 use leptos::*;
 use gloo_timers::future::TimeoutFuture;
 use uuid::Uuid;
@@ -20,14 +18,7 @@ pub struct ToastConfig {
     pub toast_type: ToastType,
     pub duration: u32,
     pub position: ToastPosition,
-    pub icon: Option<IconName>,
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum ToastPosition {
-    Top,
-    Middle,
-    Bottom,
+    pub icon: Option<String>,
 }
 
 impl ToastConfig {
@@ -44,25 +35,25 @@ impl ToastConfig {
 
     pub fn success(mut self) -> Self {
         self.toast_type = ToastType::Success;
-        self.icon = Some(IconName::Success);
+        self.icon = Some("success".into());
         self
     }
 
     pub fn error(mut self) -> Self {
         self.toast_type = ToastType::Error;
-        self.icon = Some(IconName::Close);
+        self.icon = Some("close".into());
         self
     }
 
     pub fn warn(mut self) -> Self {
         self.toast_type = ToastType::Warn;
-        self.icon = Some(IconName::Warn);
+        self.icon = Some("warn".into());
         self
     }
 
     pub fn loading(mut self) -> Self {
         self.toast_type = ToastType::Loading;
-        self.icon = Some(IconName::Loading);
+        self.icon = Some("loading".into());
         self
     }
 
@@ -76,10 +67,17 @@ impl ToastConfig {
         self
     }
 
-    pub fn icon(mut self, icon: IconName) -> Self {
-        self.icon = Some(icon);
+    pub fn icon(mut self, icon: impl Into<String>) -> Self {
+        self.icon = Some(icon.into());
         self
     }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum ToastPosition {
+    Top,
+    Middle,
+    Bottom,
 }
 
 #[derive(Debug, Clone)]
@@ -101,8 +99,9 @@ impl ToastController {
         });
         if config.duration > 0 {
             let _id = config.id.clone();
+            let duration = config.duration;
             spawn_local(async move {
-                TimeoutFuture::new(config.duration).await;
+                TimeoutFuture::new(duration).await;
             });
         }
     }
@@ -159,9 +158,9 @@ pub fn ToastContainer() -> impl IntoView {
                 key=|t| t.id.clone()
                 children=move |config: ToastConfig| {
                     let id = config.id.clone();
-                    let toasts_clone = toasts.clone();
+                    let sender_clone = items;
                     view! {
-                        <ToastItem config=config on_close=move || toasts_clone.hide(&id)/>
+                        <ToastView config=config on_close=move || sender_clone.update(|t| t.retain(|x| x.id != id))/>
                     }
                 }
             />
@@ -170,41 +169,24 @@ pub fn ToastContainer() -> impl IntoView {
 }
 
 #[component]
-pub fn ToastItem(
+fn ToastView(
     config: ToastConfig,
-    on_close: impl Fn() + 'static,
+    on_close: impl Fn(),
 ) -> impl IntoView {
-    let visible = create_rw_signal(true);
-    let icon_name = config.icon.unwrap_or(IconName::Info);
-    let type_class = match config.toast_type {
-        ToastType::Default => "weui-toast--default",
-        ToastType::Success => "weui-toast--success",
-        ToastType::Error => "weui-toast--error",
-        ToastType::Warn => "weui-toast--warn",
-        ToastType::Loading => "weui-toast--loading",
-    };
-    let position_class = match config.position {
-        ToastPosition::Top => "weui-toast--top",
-        ToastPosition::Middle => "weui-toast--middle",
-        ToastPosition::Bottom => "weui-toast--bottom",
-    };
-    if config.duration > 0 {
-        let duration = config.duration;
-        spawn_local(async move {
-            TimeoutFuture::new(duration).await;
-            visible.set(false);
-            on_close();
-        });
-    }
     view! {
         <div
-            class=move || format!("weui-toast {} {} {}", type_class, position_class, if visible.get() { "weui-toast--visible" } else { "weui-toast--hidden" })
+            class="weui-toast"
+            class:weui-toast--default=move || config.toast_type == ToastType::Default
+            class:weui-toast--success=move || config.toast_type == ToastType::Success
+            class:weui-toast--error=move || config.toast_type == ToastType::Error
+            class:weui-toast--warn=move || config.toast_type == ToastType::Warn
+            class:weui-toast--loading=move || config.toast_type == ToastType::Loading
             role="alert"
             aria-live="assertive"
             aria-atomic="true"
         >
             <div class="weui-toast__icon">
-                <Icon name=icon_name size=Size::Lg/>
+                {config.icon.as_ref().map(|_| view! { <span class="weui-toast__svg-icon"/> })}
             </div>
             <div class="weui-toast__text">{config.message}</div>
         </div>

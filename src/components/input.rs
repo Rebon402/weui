@@ -1,5 +1,3 @@
-use super::icon::{Icon, IconName};
-use crate::theme::Size;
 use leptos::*;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -26,14 +24,6 @@ pub enum InputAlign {
     Right,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum InputDisplay {
-    Normal,
-    Floating,
-    Stacked,
-    StackedFloating,
-}
-
 #[component]
 pub fn Input(
     #[prop(into)] value: MaybeSignal<String>,
@@ -49,16 +39,8 @@ pub fn Input(
     #[prop(into, default = "".into())] label: MaybeSignal<String>,
     #[prop(into, default = "".into())] error_message: MaybeSignal<String>,
     #[prop(into, default = InputAlign::Left.into())] align: MaybeSignal<InputAlign>,
-    #[prop(into, default = "".into())] icon_left: MaybeSignal<String>,
-    #[prop(into, default = "".into())] icon_right: MaybeSignal<String>,
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
     #[prop(into, default = "".into())] style: MaybeSignal<String>,
-    #[prop(into, default = 0.into())] max_length: MaybeSignal<i32>,
-    #[prop(into, default = 0.into())] min_length: MaybeSignal<i32>,
-    #[prop(into, default = "".into())] pattern: MaybeSignal<String>,
-    #[prop(into, default = "".into())] autocomplete: MaybeSignal<String>,
-    #[prop(into, default = "".into())] name: MaybeSignal<String>,
-    #[prop(into, default = "".into())] inputmode: MaybeSignal<String>,
 ) -> impl IntoView {
     let input_ref = create_node_ref::<html::Input>();
     let has_value = create_memo(move |_| !value.get().is_empty());
@@ -98,56 +80,38 @@ pub fn Input(
         on_input.call("".to_string());
         input_ref.get().map(|el| el.focus().ok());
     };
-    let handle_focus = move |_: ev::FocusEvent| {};
-    let handle_blur = move |_: ev::FocusEvent| {};
+    let label_val = label;
     view! {
         <div
             class="weui-input-wrap"
             class=("weui-input-wrap--error", move || error.get())
             class=("weui-input-wrap--disabled", move || disabled.get())
-            class=("weui-input-wrap--readonly", move || readonly.get())
         >
-            <Show when=move || !label.get().is_empty()>
-                <label class="weui-input__label">{label.get()}</label>
+            <Show when=move || !label_val.get().is_empty()>
+                <label class="weui-input__label">{label_val.get()}</label>
             </Show>
             <div class="weui-input__container">
-                <Show when=move || !icon_left.get().is_empty()>
-                    <span class="weui-input__icon-left"><Icon name=IconName::Search/></span>
-                </Show>
                 <input
                     node_ref=input_ref
                     type=type_attr
-                    class=move || format!("weui-input {} {}", align_class(), class.get())
+                    class=move || format!("weui-input {}", align_class())
                     class=("weui-input--error", move || error.get())
-                    class=("weui-input--disabled", move || disabled.get())
                     prop:value=value
                     placeholder=placeholder
                     disabled=disabled
                     readonly=readonly
                     required=required
-                    maxlength=move || if max_length.get() > 0 { max_length.get() } else { -1 }
-                    minlength=move || if min_length.get() > 0 { min_length.get() } else { -1 }
-                    pattern=move || if pattern.get().is_empty() { None } else { Some(pattern.get()) }
-                    autocomplete=move || if autocomplete.get().is_empty() { None } else { Some(autocomplete.get()) }
-                    name=move || if name.get().is_empty() { None } else { Some(name.get()) }
-                    inputmode=move || if inputmode.get().is_empty() { None } else { Some(inputmode.get()) }
                     style=style
                     on:input=handle_input
-                    on:focus=handle_focus
-                    on:blur=handle_blur
                 />
                 <Show when=move || show_clear()>
                     <button
                         class="weui-input__clear"
                         on:click=handle_clear
                         type="button"
-                        aria-label="Clear input"
                     >
-                        <Icon name=IconName::Clear size=Size::Sm/>
+                        <svg class="weui-icon weui-icon--xs" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
                     </button>
-                </Show>
-                <Show when=move || !icon_right.get().is_empty()>
-                    <span class="weui-input__icon-right"><Icon name=IconName::Search/></span>
                 </Show>
             </div>
             <Show when=move || error.get() && !error_message.get().is_empty()>
@@ -168,7 +132,6 @@ pub fn TextArea(
     #[prop(into, default = false.into())] error: MaybeSignal<bool>,
     #[prop(into, default = false.into())] auto_height: MaybeSignal<bool>,
     #[prop(into, default = 0.into())] rows: MaybeSignal<i32>,
-    #[prop(into, default = 0.into())] max_length: MaybeSignal<i32>,
     #[prop(into, default = "".into())] label: MaybeSignal<String>,
     #[prop(into, default = "".into())] error_message: MaybeSignal<String>,
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
@@ -178,14 +141,15 @@ pub fn TextArea(
         let target = event_target::<web_sys::HtmlTextAreaElement>(&ev);
         on_input.call(target.value());
     };
+    let label_val = label;
     view! {
         <div
             class="weui-textarea-wrap"
             class=("weui-textarea-wrap--error", move || error.get())
             class=("weui-textarea-wrap--disabled", move || disabled.get())
         >
-            <Show when=move || !label.get().is_empty()>
-                <label class="weui-textarea__label">{label.get()}</label>
+            <Show when=move || !label_val.get().is_empty()>
+                <label class="weui-textarea__label">{label_val.get()}</label>
             </Show>
             <textarea
                 class=move || format!("weui-textarea {}", class.get())
@@ -197,15 +161,9 @@ pub fn TextArea(
                 readonly=readonly
                 required=required
                 rows=move || if rows.get() > 0 { rows.get() } else { 3 }
-                maxlength=move || if max_length.get() > 0 { max_length.get() } else { -1 }
                 style=style
                 on:input=handle_input
             />
-            <Show when=move || max_length.get() > 0>
-                <div class="weui-textarea__counter">
-                    {move || format!("{}/{}", value.get().len(), max_length.get())}
-                </div>
-            </Show>
             <Show when=move || error.get() && !error_message.get().is_empty()>
                 <div class="weui-textarea__error">{error_message.get()}</div>
             </Show>

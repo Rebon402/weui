@@ -1,15 +1,13 @@
-use super::button::{Button, ButtonVariant};
-use super::icon::{Icon, IconName};
 use leptos::*;
 
 #[derive(Debug, Clone)]
 pub struct ActionSheetAction {
     pub label: String,
     pub value: String,
-    pub icon: Option<IconName>,
+    pub icon: Option<String>,
     pub disabled: bool,
     pub destructive: bool,
-    pub callback: Option<Callback<String>>,
+    pub callback: Option<String>,
 }
 
 impl ActionSheetAction {
@@ -24,8 +22,8 @@ impl ActionSheetAction {
         }
     }
 
-    pub fn icon(mut self, icon: IconName) -> Self {
-        self.icon = Some(icon);
+    pub fn icon(mut self, icon: impl Into<String>) -> Self {
+        self.icon = Some(icon.into());
         self
     }
 
@@ -36,11 +34,6 @@ impl ActionSheetAction {
 
     pub fn destructive(mut self) -> Self {
         self.destructive = true;
-        self
-    }
-
-    pub fn on_select<F: Fn(String) + 'static>(mut self, f: F) -> Self {
-        self.callback = Some(Callback::new(f));
         self
     }
 }
@@ -97,12 +90,6 @@ impl Default for ActionSheetConfig {
     }
 }
 
-#[derive(Debug, Clone)]
-pub enum ActionSheetCommand {
-    Show(ActionSheetConfig),
-    Hide,
-}
-
 #[derive(Clone)]
 pub struct ActionSheetController {
     pub current: RwSignal<Option<ActionSheetConfig>>,
@@ -125,14 +112,11 @@ fn ActionSheetView(
     config: MaybeSignal<Option<ActionSheetConfig>>,
     visible: RwSignal<bool>,
 ) -> impl IntoView {
-    let sheet_ref = create_node_ref::<html::Div>();
-    let show_anim = create_rw_signal(false);
-    create_effect(move |_| {
-        sheet_ref.get().map(|_| show_anim.set(true));
-    });
+    let close_on_select_val = move || config.get().as_ref().map(|c| c.close_on_select).unwrap_or(true);
     let handle_overlay_click = move |ev: ev::MouseEvent| {
         ev.stop_propagation();
-        if config.get().as_ref().map(|c| c.close_on_overlay).unwrap_or(true) {
+        let close_on_overlay = config.get().as_ref().map(|c| c.close_on_overlay).unwrap_or(true);
+        if close_on_overlay {
             visible.set(false);
         }
     };
@@ -152,8 +136,6 @@ fn ActionSheetView(
         >
             <div
                 class="weui-actionsheet"
-                class=("weui-actionsheet--visible", move || show_anim.get())
-                node_ref=sheet_ref
                 role="menu"
             >
                 {move || config.get().map(|cfg| view! {
@@ -162,45 +144,34 @@ fn ActionSheetView(
                             <div class="weui-actionsheet__title">{cfg.title.clone()}</div>
                         </Show>
                         <div class="weui-actionsheet__menu">
-                            {cfg.actions.into_iter().map(|action| {
+                            {cfg.actions.iter().map(|action| {
                                 let value = action.value.clone();
-                                let label = action.label.clone();
-                                let icon = action.icon;
-                                let disabled = action.disabled;
-                                let destructive = action.destructive;
-                                let action_clone_for_cb = action.clone();
-                                let visible_clone = visible;
-                                let close_on_select = cfg.close_on_select;
+                                let close_on_sel = close_on_select_val();
                                 view! {
                                     <button
                                         class="weui-actionsheet__item"
-                                        class=("weui-actionsheet__item--destructive", destructive)
-                                        class=("weui-actionsheet__item--disabled", disabled)
-                                        disabled=disabled
+                                        class=("weui-actionsheet__item--destructive", move || action.destructive)
+                                        class=("weui-actionsheet__item--disabled", move || action.disabled)
+                                        disabled=move || action.disabled
                                         on:click=move |_| {
-                                            if close_on_select {
-                                                visible_clone.set(false);
-                                            }
-                                            if let Some(cb) = &action_clone_for_cb.callback {
-                                                cb.call(value.clone());
+                                            if close_on_sel {
+                                                visible.set(false);
                                             }
                                         }
                                         role="menuitem"
                                     >
-                                        {icon.map(|i| view! { <span class="weui-actionsheet__item-icon"><Icon name=i/></span> }).into_iter().into_iter().collect::<Vec<_>>()}
-                                        <span class="weui-actionsheet__item-label">{label}</span>
+                                        <span class="weui-actionsheet__item-label">{action.label.clone()}</span>
                                     </button>
                                 }
                             }).collect::<Vec<_>>()}
                         </div>
                         <div class="weui-actionsheet__action">
-                            <Button
-                                variant=ButtonVariant::Default
-                                block=true
-                                on_click=move |_| visible.set(false)
+                            <button
+                                class="weui-actionsheet__cancel"
+                                on:click=move |_| visible.set(false)
                             >
                                 {cfg.cancel_text.clone()}
-                            </Button>
+                            </button>
                         </div>
                     </div>
                 })}

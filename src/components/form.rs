@@ -15,27 +15,6 @@ pub enum ValidateStatus {
     Validating,
 }
 
-#[derive(Debug, Clone)]
-pub struct FormFieldState {
-    pub value: String,
-    pub error: Option<String>,
-    pub status: ValidateStatus,
-    pub touched: bool,
-}
-
-#[derive(Clone)]
-pub struct FormState {
-    pub fields: RwSignal<std::collections::HashMap<String, FormFieldState>>,
-}
-
-impl FormState {
-    pub fn new() -> Self {
-        Self {
-            fields: RwSignal::new(std::collections::HashMap::new()),
-        }
-    }
-}
-
 #[component]
 pub fn Form(
     #[prop(into)] layout: MaybeSignal<FormLayout>,
@@ -44,8 +23,6 @@ pub fn Form(
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
     children: Children,
 ) -> impl IntoView {
-    let form_state = FormState::new();
-    provide_context(form_state);
     let layout_class = move || match layout.get() {
         FormLayout::Horizontal => "weui-form--horizontal",
         FormLayout::Vertical => "",
@@ -55,7 +32,6 @@ pub fn Form(
         <form
             class=move || format!("weui-form {} {}", layout_class(), class.get())
             class=("weui-form--disabled", move || disabled.get())
-            class=("weui-form--readonly", move || readonly.get())
             novalidate="true"
         >
             {children()}
@@ -80,14 +56,15 @@ pub fn FormField(
         ValidateStatus::Error => "weui-form-field--error",
         ValidateStatus::Validating => "weui-form-field--validating",
     };
+    let label_val = label;
     view! {
         <div
             class=move || format!("weui-form-field {} {}", status_class(), class.get())
             class=("weui-form-field--required", move || required.get())
         >
-            <Show when=move || !label.get().is_empty()>
+            <Show when=move || !label_val.get().is_empty()>
                 <label class="weui-form-field__label">
-                    {label.get()}
+                    {label_val.get()}
                     <Show when=move || required.get()>
                         <span class="weui-form-field__required">*</span>
                     </Show>

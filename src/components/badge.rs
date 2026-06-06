@@ -35,26 +35,26 @@ pub fn Badge(
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
     children: Children,
 ) -> impl IntoView {
-    let badge_content = move || match badge_type.get() {
-        BadgeType::Dot => None,
-        BadgeType::Count => Some(format!("{}", count.get())),
-        BadgeType::Text => Some(text.get()),
-        BadgeType::Corner => Some(text.get()),
+    let is_dot = move || badge_type.get() == BadgeType::Dot;
+    let content = move || match badge_type.get() {
+        BadgeType::Dot => "",
+        BadgeType::Count => &format!("{}", count.get()),
+        BadgeType::Text => text.get().as_str(),
+        BadgeType::Corner => text.get().as_str(),
     };
     view! {
         <span
-            class=move || format!("weui-badge {}", class.get())
-            class=("weui-badge--dot", move || badge_type.get() == BadgeType::Dot)
-            class=("weui-badge--visible", move || visible.get())
-            class:weui-badge--default=move || variant.get() == BadgeVariant::Default
-            class:weui-badge--primary=move || variant.get() == BadgeVariant::Primary
-            class:weui-badge--success=move || variant.get() == BadgeVariant::Success
-            class:weui-badge--warning=move || variant.get() == BadgeVariant::Warning
-            class:weui-badge--error=move || variant.get() == BadgeVariant::Error
-            class:weui-badge--sm=move || size.get() == BadgeSize::Sm
-            class:weui-badge--lg=move || size.get() == BadgeSize::Lg
+            class=move || format!("weui-badge {} {} {} {}", class.get(), 
+                if badge_type.get() == BadgeType::Dot { "weui-badge--dot" } else { "" },
+                if visible.get() { "weui-badge--visible" } else { "" },
+                match size.get() { BadgeSize::Sm => "weui-badge--sm", BadgeSize::Md => "", BadgeSize::Lg => "weui-badge--lg" })
+            class=("weui-badge--default", move || variant.get() == BadgeVariant::Default)
+            class=("weui-badge--primary", move || variant.get() == BadgeVariant::Primary)
+            class=("weui-badge--success", move || variant.get() == BadgeVariant::Success)
+            class=("weui-badge--warning", move || variant.get() == BadgeVariant::Warning)
+            class=("weui-badge--error", move || variant.get() == BadgeVariant::Error)
         >
-            {badge_content}
+            {move || if is_dot() { view! {} } else { view! { <span class="weui-badge__content">{content()}</span> }} }
             <span class="weui-badge__wrapper">
                 {children()}
             </span>

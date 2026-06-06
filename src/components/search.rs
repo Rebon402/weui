@@ -16,9 +16,6 @@ pub fn SearchBar(
     #[prop(into, default = false.into())] disabled: MaybeSignal<bool>,
     #[prop(into, default = false.into())] focus: MaybeSignal<bool>,
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
-    #[prop(into, default = None.into())] on_search: Option<Callback<String, ()>>,
-    #[prop(into, default = None.into())] on_cancel: Option<Callback<(), ()>>,
-    #[prop(into, default = None.into())] on_clear: Option<Callback<(), ()>>,
 ) -> impl IntoView {
     let input_ref = create_node_ref::<html::Input>();
     let has_value = create_memo(move |_| !value.get().is_empty());
@@ -36,25 +33,9 @@ pub fn SearchBar(
         let target = event_target::<web_sys::HtmlInputElement>(&ev);
         on_input.call(target.value());
     };
-    let handle_keydown = move |ev: ev::KeyboardEvent| {
-        if ev.key() == "Enter" {
-            if let Some(cb) = &on_search {
-                cb.call(value.get());
-            }
-        }
-    };
     let handle_clear = move |_: ev::MouseEvent| {
         on_input.call("".to_string());
-        if let Some(cb) = &on_clear {
-            cb.call(());
-        }
         input_ref.get().map(|el| el.focus().ok());
-    };
-    let handle_cancel = move |_: ev::MouseEvent| {
-        on_input.call("".to_string());
-        if let Some(cb) = &on_cancel {
-            cb.call(());
-        }
     };
     view! {
         <div
@@ -71,7 +52,6 @@ pub fn SearchBar(
                 placeholder=placeholder
                 disabled=disabled
                 on:input=handle_input
-                on:keydown=handle_keydown
                 role="searchbox"
             />
             <Show when=move || show_clear()>
@@ -79,17 +59,7 @@ pub fn SearchBar(
                     class="weui-search__clear"
                     on:click=handle_clear
                     type="button"
-                    aria-label="Clear search"
                 />
-            </Show>
-            <Show when=move || on_cancel.is_some()>
-                <button
-                    class="weui-search__cancel"
-                    on:click=handle_cancel
-                    type="button"
-                >
-                    "Cancel"
-                </button>
             </Show>
         </div>
     }
