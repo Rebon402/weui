@@ -95,15 +95,9 @@ pub fn Slider(
                 disabled=disabled
                 on:input=handle_input
             />
-            {move || {
-                if show_value.get() {
-                    view! {
-                        <span class="weui-slider__value">{value}</span>
-                    }
-                } else {
-                    view! {}
-                }
-            }}
+            <Show when=move || show_value.get()>
+                <span class="weui-slider__value">{value}</span>
+            </Show>
         </div>
     }
 }

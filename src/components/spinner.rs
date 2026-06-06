@@ -91,13 +91,9 @@ pub fn Loading(
                 class=("weui-loading--fullscreen", move || fullscreen.get())
             >
                 <Spinner spinner_type=spinner_type size=size/>
-                {move || {
-                    if !text.get().is_empty() {
-                        view! { <span class="weui-loading__text">{text.get()}</span> }
-                    } else {
-                        view! {}
-                    }
-                }}
+                <Show when=move || !text.get().is_empty()>
+                    <span class="weui-loading__text">{text.get()}</span>
+                </Show>
             </div>
         </Show>
     }

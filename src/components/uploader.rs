@@ -81,35 +81,32 @@ pub fn Uploader(
                         .into_iter()
                         .map(|file| {
                             let file_clone = file.clone();
+                            let file_url = file.url.clone();
+                            let file_name = file.name.clone();
+                            let file_status = file.status;
+                            let file_progress = file.progress;
                             view! {
                                 <div
                                     class="weui-uploader__file"
-                                    class=("weui-uploader__file--uploading", move || matches!(file.status, UploaderStatus::Uploading))
-                                    class=("weui-uploader__file--success", move || matches!(file.status, UploaderStatus::Success))
-                                    class=("weui-uploader__file--failed", move || matches!(file.status, UploaderStatus::Failed))
+                                    class=("weui-uploader__file--uploading", matches!(file_status, UploaderStatus::Uploading))
+                                    class=("weui-uploader__file--success", matches!(file_status, UploaderStatus::Success))
+                                    class=("weui-uploader__file--failed", matches!(file_status, UploaderStatus::Failed))
                                 >
-                                    {move || {
-                                        if let Some(ref url) = file.url {
-                                            view! { <img class="weui-uploader__img" src=url alt=file.name.clone()/> }
-                                        } else {
-                                            view! { <div class="weui-uploader__file-icon"/> }
-                                        }
-                                    }}
-                                    <span class="weui-uploader__name">{file.name}</span>
-                                    {move || {
-                                        if matches!(file.status, UploaderStatus::Uploading) {
-                                            view! {
-                                                <div class="weui-uploader__progress">
-                                                    <div
-                                                        class="weui-uploader__progress-bar"
-                                                        style=move || format!("width: {}%", file.progress)
-                                                    />
-                                                </div>
-                                            }
-                                        } else {
-                                            view! {}
-                                        }
-                                    }}
+                                    <Show when=move || file_url.is_some()>
+                                        <img class="weui-uploader__img" src=file_url.unwrap() alt=file_name.clone()/>
+                                    </Show>
+                                    <Show when=move || file_url.is_none()>
+                                        <div class="weui-uploader__file-icon"/>
+                                    </Show>
+                                    <span class="weui-uploader__name">{file_name}</span>
+                                    <Show when=move || matches!(file_status, UploaderStatus::Uploading)>
+                                        <div class="weui-uploader__progress">
+                                            <div
+                                                class="weui-uploader__progress-bar"
+                                                style=format!("width: {}%", file_progress)
+                                            />
+                                        </div>
+                                    </Show>
                                     <button
                                         class="weui-uploader__delete"
                                         on:click=move |_| handle_delete(file_clone.clone())
@@ -122,28 +119,22 @@ pub fn Uploader(
                         .collect_view()
                 }}
             </div>
-            {move || {
-                if can_upload.get() {
-                    view! {
-                        <div class="weui-uploader__input-wrapper" on:click=handle_click>
-                            <div class="weui-uploader__input">
-                                <span class="weui-uploader__input-icon"/>
-                            </div>
-                            <input
-                                node_ref=input_ref
-                                type="file"
-                                class="weui-uploader__input-native"
-                                accept=accept
-                                multiple=multiple
-                                disabled=disabled
-                                on:change=handle_change
-                            />
-                        </div>
-                    }
-                } else {
-                    view! {}
-                }
-            }}
+            <Show when=move || can_upload()>
+                <div class="weui-uploader__input-wrapper" on:click=handle_click>
+                    <div class="weui-uploader__input">
+                        <span class="weui-uploader__input-icon"/>
+                    </div>
+                    <input
+                        node_ref=input_ref
+                        type="file"
+                        class="weui-uploader__input-native"
+                        accept=accept
+                        multiple=multiple
+                        disabled=disabled
+                        on:change=handle_change
+                    />
+                </div>
+            </Show>
         </div>
     }
 }

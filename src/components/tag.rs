@@ -69,20 +69,14 @@ pub fn Tag(
                 class=("weui-tag--mark", move || mark.get())
             >
                 {children()}
-                {move || {
-                    if closable.get() {
-                        view! {
-                            <button
-                                class="weui-tag__close"
-                                on:click=handle_close
-                                type="button"
-                                aria-label="Close tag"
-                            />
-                        }
-                    } else {
-                        view! {}
-                    }
-                }}
+                <Show when=move || closable.get()>
+                    <button
+                        class="weui-tag__close"
+                        on:click=handle_close
+                        type="button"
+                        aria-label="Close tag"
+                    />
+                </Show>
             </span>
         </Show>
     }

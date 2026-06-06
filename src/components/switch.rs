@@ -61,31 +61,21 @@ pub fn Switch(
             disabled=move || disabled.get()
         >
             <span class="weui-switch__handle">
-                {move || {
-                    if loading.get() {
-                        view! { <span class="weui-switch__loading"/> }
-                    } else {
-                        view! {}
-                    }
-                }}
+                <Show when=move || loading.get()>
+                    <span class="weui-switch__loading"/>
+                </Show>
             </span>
-            {move || {
-                if !active_text.get().is_empty() || !inactive_text.get().is_empty() {
-                    view! {
-                        <span class="weui-switch__label">
-                            {move || {
-                                if checked.get() {
-                                    active_text.get()
-                                } else {
-                                    inactive_text.get()
-                                }
-                            }}
-                        </span>
-                    }
-                } else {
-                    view! {}
-                }
-            }}
+            <Show when=move || !active_text.get().is_empty() || !inactive_text.get().is_empty()>
+                <span class="weui-switch__label">
+                    {move || {
+                        if checked.get() {
+                            active_text.get()
+                        } else {
+                            inactive_text.get()
+                        }
+                    }}
+                </span>
+            </Show>
         </button>
     }
 }

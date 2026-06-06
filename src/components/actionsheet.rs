@@ -187,7 +187,7 @@ fn ActionSheetView(
                                         }
                                         role="menuitem"
                                     >
-                                        {icon.map(|i| view! { <span class="weui-actionsheet__item-icon"><Icon name=i/></span> }).collect::<Vec<_>>()}
+                                        {icon.map(|i| view! { <span class="weui-actionsheet__item-icon"><Icon name=i/></span> }).into_iter().into_iter().collect::<Vec<_>>()}
                                         <span class="weui-actionsheet__item-label">{label}</span>
                                     </button>
                                 }

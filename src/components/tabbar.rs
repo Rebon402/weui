@@ -74,22 +74,15 @@ pub fn TabbarItem(
             aria-selected=move || is_active.get().to_string()
         >
             <span class="weui-tabbar__icon">
-                {move || {
-                    if !icon.get().is_empty() {
-                        view! { <span class="weui-tabbar__icon-img">{icon.get()}</span> }
-                    } else {
-                        view! {}
-                    }
-                }}
-                {move || {
-                    if dot.get() {
-                        view! { <span class="weui-tabbar__dot"/> }
-                    } else if !badge.get().is_empty() {
-                        view! { <span class="weui-tabbar__badge">{badge.get()}</span> }
-                    } else {
-                        view! {}
-                    }
-                }}
+                <Show when=move || !icon.get().is_empty()>
+                    <span class="weui-tabbar__icon-img">{icon.get()}</span>
+                </Show>
+                <Show when=move || dot.get()>
+                    <span class="weui-tabbar__dot"/>
+                </Show>
+                <Show when=move || !dot.get() && !badge.get().is_empty()>
+                    <span class="weui-tabbar__badge">{badge.get()}</span>
+                </Show>
             </span>
             <span class="weui-tabbar__label">{title}</span>
         </button>
