@@ -74,35 +74,23 @@ pub fn SearchBar(
                 on:keydown=handle_keydown
                 role="searchbox"
             />
-            {move || {
-                if show_clear() {
-                    view! {
-                        <button
-                            class="weui-search__clear"
-                            on:click=handle_clear
-                            type="button"
-                            aria-label="Clear search"
-                        />
-                    }
-                } else {
-                    view! {}
-                }
-            }}
-            {move || {
-                if let Some(_) = &on_cancel {
-                    view! {
-                        <button
-                            class="weui-search__cancel"
-                            on:click=handle_cancel
-                            type="button"
-                        >
-                            "Cancel"
-                        </button>
-                    }
-                } else {
-                    view! {}
-                }
-            }}
+            <Show when=move || show_clear()>
+                <button
+                    class="weui-search__clear"
+                    on:click=handle_clear
+                    type="button"
+                    aria-label="Clear search"
+                />
+            </Show>
+            <Show when=move || on_cancel.is_some()>
+                <button
+                    class="weui-search__cancel"
+                    on:click=handle_cancel
+                    type="button"
+                >
+                    "Cancel"
+                </button>
+            </Show>
         </div>
     }
 }
