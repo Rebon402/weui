@@ -7,12 +7,23 @@ edition = "2024"
 [lib]
 crate-type = ["cdylib", "rlib"]
 
+[features]
+default = ["hydrate"]
+hydrate = ["leptos/hydrate"]
+ssr = ["leptos/ssr"]
+
 [dependencies]
+leptos = { version = "0.6", features = ["nightly"] }
+leptos_meta = { version = "0.6" }
+leptos_router = { version = "0.6" }
 wasm-bindgen = "0.2"
-web-sys = { version = "0.3", features = ["Document", "Element", "HtmlElement", "Node", "Window", "EventTarget", "Event", "MouseEvent", "KeyboardEvent", "InputEvent", "HtmlInputElement", "HtmlButtonElement", "HtmlDivElement", "HtmlSpanElement", "CssStyleDeclaration"] }
+web-sys = { version = "0.3", features = ["Document", "Element", "HtmlElement", "Node", "Window", "EventTarget", "Event", "MouseEvent", "KeyboardEvent", "InputEvent", "HtmlInputElement", "HtmlButtonElement", "HtmlDivElement", "HtmlSpanElement", "CssStyleDeclaration", "DomTokenList", "HtmlCollection", "NodeList", "HtmlLabelElement", "HtmlUListElement", "HtmlLiElement", "HtmlAnchorElement", "HtmlImageElement", "SvgElement", "HtmlTemplateElement", "ShadowRoot", "ShadowRootInit", "ShadowRootMode", "CustomElementRegistry", "HtmlSlotElement"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-once_cell = "1.19"
+thiserror = "1.0"
+uuid = { version = "1.0", features = ["v4", "js"] }
+gloo-timers = { version = "0.3", features = ["futures"] }
+futures = "0.3"
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3"

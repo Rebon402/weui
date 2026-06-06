@@ -1,62 +1,171 @@
-use once_cell::sync::Lazy;
-use wasm_bindgen::prelude::*;
-use web_sys::{Document, HtmlStyleElement};
+use leptos::*;
 
-static THEME_CSS: Lazy<String> = Lazy::new(|| include_str!("../../assets/theme.css").to_string());
-
-pub fn inject_theme(document: &Document) {
-    let style = document.create_element("style").unwrap().dyn_into::<HtmlStyleElement>().unwrap();
-    style.set_text_content(Some(&THEME_CSS));
-    let head = document.head().unwrap();
-    head.append_child(&style).unwrap();
-}
-
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Theme {
-    primary_color: String,
-    background_color: String,
-    text_color: String,
+    pub primary: String,
+    pub success: String,
+    pub warning: String,
+    pub error: String,
+    pub text_primary: String,
+    pub text_secondary: String,
+    pub text_placeholder: String,
+    pub background: String,
+    pub background_secondary: String,
+    pub border: String,
 }
 
 impl Default for Theme {
     fn default() -> Self {
-        Theme {
-            primary_color: "#07C160".to_string(),
-            background_color: "#FFFFFF".to_string(),
-            text_color: "#333333".to_string(),
+        Self {
+            primary: "#07C160".into(),
+            success: "#07C160".into(),
+            warning: "#FFC300".into(),
+            error: "#FA5151".into(),
+            text_primary: "#191919".into(),
+            text_secondary: "#888888".into(),
+            text_placeholder: "#B2B2B2".into(),
+            background: "#FFFFFF".into(),
+            background_secondary: "#F7F7F7".into(),
+            border: "#E5E5E5".into(),
         }
     }
 }
 
-impl Theme {
-    pub fn new() -> Self {
-        Self::default()
-    }
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum ThemeMode {
+    Light,
+    Dark,
+}
 
-    pub fn primary_color(mut self, color: &str) -> Self {
-        self.primary_color = color.to_string();
-        self
-    }
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum ColorScheme {
+    Green,
+    Blue,
+    Orange,
+    Red,
+}
 
-    pub fn background_color(mut self, color: &str) -> Self {
-        self.background_color = color.to_string();
-        self
-    }
-
-    pub fn text_color(mut self, color: &str) -> Self {
-        self.text_color = color.to_string();
-        self
-    }
-
-    pub fn apply(&self, document: &Document) {
-        let root = document.document_element().unwrap();
-        let style = root.style();
-        style.set_property("--weui-primary", &self.primary_color).unwrap();
-        style.set_property("--weui-background", &self.background_color).unwrap();
-        style.set_property("--weui-text", &self.text_color).unwrap();
+impl ColorScheme {
+    pub fn primary(&self) -> &'static str {
+        match self {
+            Self::Green => "#07C160",
+            Self::Blue => "#10AEFF",
+            Self::Orange => "#FA9D3B",
+            Self::Red => "#FA5151",
+        }
     }
 }
 
-#[wasm_bindgen]
-pub fn init_theme() -> Theme {
-    Theme::new()
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum Breakpoint {
+    Mobile,
+    Tablet,
+    Desktop,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Spacing {
+    None,
+    Xs,
+    Sm,
+    Md,
+    Lg,
+    Xl,
+    Xxl,
+}
+
+impl Spacing {
+    pub fn value(&self) -> &'static str {
+        match self {
+            Self::None => "0",
+            Self::Xs => "4px",
+            Self::Sm => "8px",
+            Self::Md => "12px",
+            Self::Lg => "16px",
+            Self::Xl => "24px",
+            Self::Xxl => "32px",
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum SemanticColor {
+    Primary,
+    Success,
+    Warning,
+    Error,
+    Info,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Size {
+    Xs,
+    Sm,
+    Md,
+    Lg,
+    Xl,
+}
+
+impl Size {
+    pub fn button_height(&self) -> &'static str {
+        match self {
+            Self::Xs => "28px",
+            Self::Sm => "32px",
+            Self::Md => "44px",
+            Self::Lg => "52px",
+            Self::Xl => "60px",
+        }
+    }
+    pub fn font_size(&self) -> &'static str {
+        match self {
+            Self::Xs => "12px",
+            Self::Sm => "14px",
+            Self::Md => "16px",
+            Self::Lg => "18px",
+            Self::Xl => "20px",
+        }
+    }
+    pub fn icon_size(&self) -> &'static str {
+        match self {
+            Self::Xs => "12px",
+            Self::Sm => "14px",
+            Self::Md => "16px",
+            Self::Lg => "20px",
+            Self::Xl => "24px",
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Direction {
+    Horizontal,
+    Vertical,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Position {
+    Start,
+    Center,
+    End,
+    Between,
+    Around,
+    Evenly,
+}
+
+#[derive(Default)]
+pub struct ThemeContext {
+    theme: RwSignal<Theme>,
+    mode: RwSignal<ThemeMode>,
+}
+
+pub fn provide_theme() {
+    provide_context(ThemeContext {
+        theme: RwSignal::new(Theme::default()),
+        mode: RwSignal::new(ThemeMode::Light),
+    });
+}
+
+pub fn use_theme() -> ThemeContext {
+    use_context::<ThemeContext>()
+        .expect("Theme context missing. Wrap with <ThemeProvider>")
 }
