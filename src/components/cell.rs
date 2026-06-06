@@ -1,6 +1,3 @@
-use super::icon::Icon;
-use crate::theme::Size;
-use super::icon::IconName;
 use leptos::*;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -23,28 +20,14 @@ pub fn Cell(
     #[prop(into, default = "".into())] desc: MaybeSignal<String>,
     #[prop(into, default = CellSize::Medium.into())] size: MaybeSignal<CellSize>,
     #[prop(into, default = false.into())] border: MaybeSignal<bool>,
-    #[prop(into, default = false.into())] required: MaybeSignal<bool>,
+    #[prop(into, default = false.into())] _required: MaybeSignal<bool>,
     #[prop(into, default = false.into())] center: MaybeSignal<bool>,
     #[prop(into, default = false.into())] clickable: MaybeSignal<bool>,
     #[prop(into, default = false.into())] is_link: MaybeSignal<bool>,
     #[prop(into, default = "".into())] icon: MaybeSignal<String>,
     #[prop(into, default = "".into())] right_icon: MaybeSignal<String>,
-    #[prop(into, default = "".into())] url: MaybeSignal<String>,
+    #[prop(into, default = "".into())] _url: MaybeSignal<String>,
 ) -> impl IntoView {
-    let icon_view = move || {
-        if !icon.get().is_empty() {
-            Some(view! { <div class="weui-cell__hd"><Icon name=IconName::Info size=Size::Md/></div> })
-        } else {
-            None
-        }
-    };
-    let right_icon_view = move || {
-        if !right_icon.get().is_empty() {
-            Some(view! { <div class="weui-cell__ft"><Icon name=IconName::Arrow/></div> })
-        } else {
-            None
-        }
-    };
     view! {
         <div
             class="weui-cell"
@@ -54,16 +37,16 @@ pub fn Cell(
             class=("weui-cell--access", move || is_link.get())
             class=("weui-cell--no-border", move || !border.get())
         >
-            <Show when=move || icon_view().is_some()>
-                {icon_view().unwrap()}
+            <Show when=move || !icon.get().is_empty()>
+                <div class="weui-cell__hd"><super::icon::Icon name=super::icon::IconName::Info size=crate::theme::Size::Md/></div>
             </Show>
             <div class="weui-cell__bd">
                 <div class="weui-cell__title">{title}</div>
                 <div class="weui-cell__desc">{desc}</div>
             </div>
             <div class="weui-cell__ft">{value}</div>
-            <Show when=move || right_icon_view().is_some()>
-                {right_icon_view().unwrap()}
+            <Show when=move || !right_icon.get().is_empty()>
+                <div class="weui-cell__ft"><super::icon::Icon name=super::icon::IconName::Arrow/></div>
             </Show>
         </div>
     }

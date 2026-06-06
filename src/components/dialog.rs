@@ -17,7 +17,7 @@ pub enum DialogType {
     Prompt,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct DialogAction {
     pub label: String,
     pub variant: ButtonVariant,

@@ -41,25 +41,18 @@ pub fn Badge(
         BadgeType::Text => Some(text.get()),
         BadgeType::Corner => Some(text.get()),
     };
-    let variant_class = move || match variant.get() {
-        BadgeVariant::Default => "weui-badge--default",
-        BadgeVariant::Primary => "weui-badge--primary",
-        BadgeVariant::Success => "weui-badge--success",
-        BadgeVariant::Warning => "weui-badge--warning",
-        BadgeVariant::Error => "weui-badge--error",
-    };
-    let size_class = move || match size.get() {
-        BadgeSize::Sm => "weui-badge--sm",
-        BadgeSize::Md => "",
-        BadgeSize::Lg => "weui-badge--lg",
-    };
     view! {
         <span
             class=move || format!("weui-badge {}", class.get())
             class=("weui-badge--dot", move || badge_type.get() == BadgeType::Dot)
             class=("weui-badge--visible", move || visible.get())
-            class:variant_class=move || true
-            class:size_class=move || true
+            class:weui-badge--default=move || variant.get() == BadgeVariant::Default
+            class:weui-badge--primary=move || variant.get() == BadgeVariant::Primary
+            class:weui-badge--success=move || variant.get() == BadgeVariant::Success
+            class:weui-badge--warning=move || variant.get() == BadgeVariant::Warning
+            class:weui-badge--error=move || variant.get() == BadgeVariant::Error
+            class:weui-badge--sm=move || size.get() == BadgeSize::Sm
+            class:weui-badge--lg=move || size.get() == BadgeSize::Lg
         >
             {badge_content}
             <span class="weui-badge__wrapper">
