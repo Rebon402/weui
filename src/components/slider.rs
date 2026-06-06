@@ -38,17 +38,17 @@ pub fn Slider(
     let handle_input = move |ev: ev::Event| {
         let target = event_target::<web_sys::HtmlInputElement>(&ev);
         if let Ok(val) = target.value().parse::<f64>() {
-            on_change.call(val);
+            leptos::Callable::call(&on_change, val);
         }
     };
     let handle_mousedown = move |_: ev::MouseEvent| {
         if let Some(cb) = &on_start {
-            cb.call(());
+            leptos::Callable::call(cb, ());
         }
     };
     let handle_mouseup = move |_: ev::MouseEvent| {
         if let Some(cb) = &on_end {
-            cb.call(value.get());
+            leptos::Callable::call(cb, value.get());
         }
     };
     view! {

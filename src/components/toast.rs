@@ -160,7 +160,7 @@ pub fn ToastContainer() -> impl IntoView {
                     let id = config.id.clone();
                     let sender_clone = items;
                     view! {
-                        <ToastView config=config on_close=move || sender_clone.update(|t| t.retain(|x| x.id != id))/>
+                        <ToastView config=config _on_close=move || sender_clone.update(|t| t.retain(|x| x.id != id))/>
                     }
                 }
             />
@@ -171,7 +171,7 @@ pub fn ToastContainer() -> impl IntoView {
 #[component]
 fn ToastView(
     config: ToastConfig,
-    on_close: impl Fn(),
+    _on_close: impl Fn(),
 ) -> impl IntoView {
     view! {
         <div

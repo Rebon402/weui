@@ -1,5 +1,3 @@
-use leptos::*;
-
 pub mod components;
 pub mod theme;
 

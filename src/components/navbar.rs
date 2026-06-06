@@ -24,6 +24,10 @@ pub fn Navbar(
     let back_text_clone_for_content = back_text.clone();
     let title_clone_for_condition = title.clone();
     let title_clone_for_content = title.clone();
+    let has_back_text = create_memo(move |_| !back_text_clone_for_condition.get().is_empty());
+    let back_text_content = create_memo(move |_| back_text_clone_for_content.get());
+    let has_title_text = create_memo(move |_| !title_clone_for_condition.get().is_empty());
+    let title_content = create_memo(move |_| title_clone_for_content.get());
     let variant_class = move || match variant.get() {
         NavbarVariant::Default => "",
         NavbarVariant::Primary => "weui-navbar--primary",
@@ -42,18 +46,18 @@ pub fn Navbar(
                         class="weui-navbar__back"
                         type="button"
                         aria-label="Go back"
-                        on:click=move |_| { if let Some(cb) = &on_back { cb.call(()) } }
+                        on:click=move |_| { if let Some(cb) = &on_back { leptos::Callable::call(cb, ()) } }
                     >
                         <span class="weui-navbar__back-icon"/>
-                        <Show when=|| !back_text_clone_for_condition().is_empty()>
-                            <span>{back_text_clone_for_content}</span>
+                        <Show when=move || has_back_text.get()>
+                            <span>{back_text_content.get()}</span>
                         </Show>
                     </button>
                 </div>
             </Show>
-            <Show when=|| !title_clone_for_condition().is_empty()>
+            <Show when=move || has_title_text.get()>
                 <div class="weui-navbar__center">
-                    <span class="weui-navbar__title">{title_clone_for_content}</span>
+                    <span class="weui-navbar__title">{title_content.get()}</span>
                 </div>
             </Show>
             <div class="weui-navbar__right">

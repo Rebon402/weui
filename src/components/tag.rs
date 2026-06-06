@@ -59,19 +59,25 @@ pub fn Tag(
     let handle_close = move |ev: ev::MouseEvent| {
         ev.stop_propagation();
         if let Some(cb) = &on_close {
-            cb.call(());
+            leptos::Callable::call(cb, ());
         }
     };
     let class_clone = class.clone();
-    let tag_classes = move || format!("weui-tag {} {} {}", type_class(), size_class(), variant_class());
+    let children_fragment = children();
+    let tag_class = create_memo(move |_| format!("weui-tag {} {} {} {}",
+        type_class(),
+        size_class(),
+        variant_class(),
+        class_clone.get()
+    ));
     view! {
         <Show when=move || visible.get()>
             <span
-                class=move || format!("{} {}", tag_classes(), class_clone.get())
+                class=move || tag_class.get()
                 class=("weui-tag--round", move || round.get())
                 class=("weui-tag--mark", move || mark.get())
             >
-                {children()}
+                {children_fragment.clone()}
                 <Show when=move || closable.get()>
                     <button
                         class="weui-tag__close"

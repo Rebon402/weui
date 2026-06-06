@@ -33,10 +33,10 @@ pub fn SearchBar(
     };
     let handle_input = move |ev: ev::Event| {
         let target = event_target::<web_sys::HtmlInputElement>(&ev);
-        on_input.call(target.value());
+        leptos::Callable::call(&on_input, target.value());
     };
     let handle_clear = move |_: ev::MouseEvent| {
-        on_input.call("".to_string());
+        leptos::Callable::call(&on_input, "".to_string());
         input_ref.get().map(|el| el.focus().ok());
     };
     view! {

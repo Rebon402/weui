@@ -48,7 +48,7 @@ pub fn Button(
 ) -> impl IntoView {
     let handle_click = move |ev: ev::MouseEvent| {
         if let Some(cb) = &on_click {
-            cb.call(ev);
+            leptos::Callable::call(cb, ev);
         }
     };
     view! {

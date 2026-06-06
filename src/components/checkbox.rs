@@ -58,7 +58,7 @@ pub fn Checkbox(
             return;
         }
         let target = event_target::<web_sys::HtmlInputElement>(&ev);
-        on_change.call(target.checked());
+        leptos::Callable::call(&on_change, target.checked());
     };
     let handle_click = move |ev: ev::MouseEvent| {
         if label_position.get() == CheckboxLabelPosition::Left {
@@ -70,7 +70,7 @@ pub fn Checkbox(
         if ev.key() == " " || ev.key() == "Enter" {
             if !disabled.get() && !readonly.get() {
                 ev.prevent_default();
-                on_change.call(!checked.get());
+                leptos::Callable::call(&on_change, !checked.get());
             }
         }
     };
@@ -119,10 +119,10 @@ pub fn Checkbox(
 
 #[component]
 pub fn CheckboxGroup(
-    #[prop(into)] checked_values: MaybeSignal<Vec<String>>,
-    #[prop(into)] on_change: Callback<Vec<String>>,
+    #[prop(into)] _checked_values: MaybeSignal<Vec<String>>,
+    #[prop(into)] _on_change: Callback<Vec<String>>,
     #[prop(into, default = false.into())] disabled: MaybeSignal<bool>,
-    #[prop(into, default = 0usize.into())] max_selection: MaybeSignal<usize>,
+    #[prop(into, default = 0usize.into())] _max_selection: MaybeSignal<usize>,
     #[prop(into, default = CheckboxDirection::Vertical.into())] direction: MaybeSignal<CheckboxDirection>,
     children: Children,
 ) -> impl IntoView {
@@ -148,7 +148,7 @@ pub enum CheckboxDirection {
 #[component]
 pub fn Radio(
     #[prop(into)] checked: MaybeSignal<bool>,
-    #[prop(into)] on_change: Callback<bool>,
+    #[prop(into)] _on_change: Callback<bool>,
     #[prop(into, default = false.into())] disabled: MaybeSignal<bool>,
     #[prop(into, default = "".into())] label: MaybeSignal<String>,
     #[prop(into, default = CheckboxSize::Medium.into())] size: MaybeSignal<CheckboxSize>,

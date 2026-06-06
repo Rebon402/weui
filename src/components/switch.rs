@@ -44,10 +44,14 @@ pub fn Switch(
             return;
         }
         if let Some(cb) = &on_click {
-            cb.call(ev);
+            leptos::Callable::call(cb, ev);
         }
-        on_change.call(!checked.get());
+        leptos::Callable::call(&on_change, !checked.get());
     };
+    let active_text_clone = active_text.clone();
+    let inactive_text_clone = inactive_text.clone();
+    let active_text_value = create_memo(move |_| active_text_clone.get());
+    let inactive_text_value = create_memo(move |_| inactive_text_clone.get());
     view! {
         <button
             class=move || format!("weui-switch {} {} {}", size_class(), variant_class(), class.get())
@@ -69,10 +73,10 @@ pub fn Switch(
             <Show when=move || !active_text.get().is_empty() || !inactive_text.get().is_empty()>
                 <span class="weui-switch__label">
                     <Show when=move || checked.get()>
-                        <span>{active_text.get()}</span>
+                        <span>{active_text_value.get()}</span>
                     </Show>
                     <Show when=move || !checked.get()>
-                        <span>{inactive_text.get()}</span>
+                        <span>{inactive_text_value.get()}</span>
                     </Show>
                 </span>
             </Show>

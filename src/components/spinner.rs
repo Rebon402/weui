@@ -89,17 +89,21 @@ pub fn Loading(
 ) -> impl IntoView {
     let class_clone2 = class.clone();
     let text_clone = text.clone();
-    let show_text = move || !text_clone().is_empty();
+    let text_clone_for_show = text_clone.clone();
+    let text_clone_for_loading = text_clone.clone();
+    let show_text = create_memo(move |_| !text_clone_for_show.get().is_empty());
+    let loading_class = create_memo(move |_| format!("weui-loading {}", class_clone2.get()));
+    let loading_text = create_memo(move |_| text_clone_for_loading.get());
     view! {
         <Show when=move || visible.get()>
-            <div>
-                class=|| format!("weui-loading {}", class_clone2.get())
+            <div
+                class=move || loading_class.get()
                 class=("weui-loading--fullscreen", move || fullscreen.get())
             >
                 <Spinner spinner_type=spinner_type size=size/>
-                <Show when=show_text>
+                <Show when=move || show_text.get()>
                     <span class="weui-loading__text">
-                        {text_clone}
+                        {loading_text.get()}
                     </span>
                 </Show>
             </div>

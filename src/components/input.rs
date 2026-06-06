@@ -44,8 +44,8 @@ pub fn Input(
     #[prop(into, default = "".into())] style: MaybeSignal<String>,
 ) -> impl IntoView {
     let input_ref = create_node_ref::<html::Input>();
-    let value_clone = value.clone();
-    let has_value = create_memo(move |_| !value_clone.get().is_empty());
+    let _value_clone = value.clone();
+    let has_value = create_memo(move |_| !_value_clone.get().is_empty());
     let value_clone2 = value.clone();
     let show_clear = create_memo(move |_| clearable.get() && has_value.get() && !disabled.get());
     create_effect(move |_| {
@@ -78,10 +78,10 @@ pub fn Input(
     let align_class_clone = align_class.clone();
     let handle_input = move |ev: ev::Event| {
         let target = event_target::<web_sys::HtmlInputElement>(&ev);
-        on_input.call(target.value());
+        leptos::Callable::call(&on_input, target.value());
     };
     let handle_clear = move |_: ev::MouseEvent| {
-        on_input.call("".to_string());
+        leptos::Callable::call(&on_input, "".to_string());
         input_ref.get().map(|el| el.focus().ok());
     };
     let label_val1 = label.clone();
@@ -101,14 +101,14 @@ pub fn Input(
                 <input
                     node_ref=input_ref
                     type=type_attr
-                    class=move || format!("weui-input {}", align_class_clone())
+                    class=move || format!("weui-input {} {}", align_class_clone(), class.get())
                     class=("weui-input--error", move || error.get())
                     prop:value=value_clone2.clone()
-                    placeholder
-                    disabled
-                    readonly
-                    required
-                    style
+                    placeholder=placeholder
+                    disabled=disabled
+                    readonly=readonly
+                    required=required
+                    style=style
                     on:input=handle_input
                 />
                 <Show when=move || show_clear()>
@@ -144,10 +144,10 @@ pub fn TextArea(
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
     #[prop(into, default = "".into())] style: MaybeSignal<String>,
 ) -> impl IntoView {
-    let value_clone = value.clone();
+    let _value_clone = value.clone();
     let handle_input = move |ev: ev::Event| {
         let target = event_target::<web_sys::HtmlTextAreaElement>(&ev);
-        on_input.call(target.value());
+        leptos::Callable::call(&on_input, target.value());
     };
     let label_val1 = label.clone();
     let label_val2 = label.clone();
@@ -169,12 +169,12 @@ pub fn TextArea(
                 class=("weui-textarea--error", move || error.get())
                 class=("weui-textarea--auto-height", move || auto_height.get())
                 prop:value=value_clone2
-                placeholder
-                disabled
-                readonly
-                required
+                placeholder=placeholder
+                disabled=disabled
+                readonly=readonly
+                required=required
                 rows=move || { if rows.get() > 0 { rows.get() } else { 3 } }
-                style
+                style=style
                 on:input=handle_input
             />
             <Show when=move || error.get() && !error_message_clone1.get().is_empty()>
