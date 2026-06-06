@@ -38,11 +38,11 @@ pub fn Uploader(
     #[prop(into, default = "".into())] accept: MaybeSignal<String>,
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
     #[prop(into, default = None.into())] before_read: Option<Callback<UploadFile, bool>>,
-    #[prop(into, default = None.into())] after_read: Option<Callback<Vec<UploadFile>>>,
-    #[prop(into, default = None.into())] on_oversize: Option<Callback<Vec<UploadFile>>>,
-    #[prop(into, default = None.into())] on_delete: Option<Callback<UploadFile>>,
-    #[prop(into, default = None.into())] on_success: Option<Callback<UploadFile>>,
-    #[prop(into, default = None.into())] on_error: Option<Callback<UploadFile>>,
+    #[prop(into, default = None.into())] after_read: Option<Callback<Vec<UploadFile>, ()>>,
+    #[prop(into, default = None.into())] on_oversize: Option<Callback<Vec<UploadFile>, ()>>,
+    #[prop(into, default = None.into())] on_delete: Option<Callback<UploadFile, ()>>,
+    #[prop(into, default = None.into())] on_success: Option<Callback<UploadFile, ()>>,
+    #[prop(into, default = None.into())] on_error: Option<Callback<UploadFile, ()>>,
 ) -> impl IntoView {
     let input_ref = create_node_ref::<html::Input>();
     let can_upload = create_memo(move |_| {
@@ -72,7 +72,7 @@ pub fn Uploader(
     view! {
         <div
             class=move || format!("weui-uploader {} {}", size_class(), class.get())
-            class:weui-uploader--disabled=move || disabled.get()
+            class=("weui-uploader--disabled", move || disabled.get())
         >
             <div class="weui-uploader__files">
                 {move || {
@@ -84,9 +84,9 @@ pub fn Uploader(
                             view! {
                                 <div
                                     class="weui-uploader__file"
-                                    class:weui-uploader__file--uploading=move || matches!(file.status, UploaderStatus::Uploading)
-                                    class:weui-uploader__file--success=move || matches!(file.status, UploaderStatus::Success)
-                                    class:weui-uploader__file--failed=move || matches!(file.status, UploaderStatus::Failed)
+                                    class=("weui-uploader__file--uploading", move || matches!(file.status, UploaderStatus::Uploading))
+                                    class=("weui-uploader__file--success", move || matches!(file.status, UploaderStatus::Success))
+                                    class=("weui-uploader__file--failed", move || matches!(file.status, UploaderStatus::Failed))
                                 >
                                     {move || {
                                         if let Some(ref url) = file.url {

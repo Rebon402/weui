@@ -100,9 +100,9 @@ impl ToastController {
             toasts.push(config.clone());
         });
         if config.duration > 0 {
-            let id = config.id.clone();
+            let _id = config.id.clone();
             spawn_local(async move {
-                TimeoutFuture::new(config.duration as u32).await;
+                TimeoutFuture::new(config.duration).await;
             });
         }
     }
@@ -170,20 +170,20 @@ pub fn ToastContainer() -> impl IntoView {
 }
 
 #[component]
-fn ToastItem(
+pub fn ToastItem(
     config: ToastConfig,
     on_close: impl Fn() + 'static,
 ) -> impl IntoView {
     let visible = create_rw_signal(true);
-    let icon = move || config.icon.unwrap_or(IconName::Info);
-    let type_class = move || match config.toast_type {
+    let icon_name = config.icon.unwrap_or(IconName::Info);
+    let type_class = match config.toast_type {
         ToastType::Default => "weui-toast--default",
         ToastType::Success => "weui-toast--success",
         ToastType::Error => "weui-toast--error",
         ToastType::Warn => "weui-toast--warn",
         ToastType::Loading => "weui-toast--loading",
     };
-    let position_class = move || match config.position {
+    let position_class = match config.position {
         ToastPosition::Top => "weui-toast--top",
         ToastPosition::Middle => "weui-toast--middle",
         ToastPosition::Bottom => "weui-toast--bottom",
@@ -198,13 +198,13 @@ fn ToastItem(
     }
     view! {
         <div
-            class=move || format!("weui-toast {} {} {}", type_class(), position_class(), if visible.get() { "weui-toast--visible" } else { "weui-toast--hidden" })
+            class=move || format!("weui-toast {} {} {}", type_class, position_class, if visible.get() { "weui-toast--visible" } else { "weui-toast--hidden" })
             role="alert"
             aria-live="assertive"
             aria-atomic="true"
         >
             <div class="weui-toast__icon">
-                <Icon name=icon size=Size::Lg/>
+                <Icon name=icon_name size=Size::Lg/>
             </div>
             <div class="weui-toast__text">{config.message}</div>
         </div>

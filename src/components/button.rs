@@ -1,5 +1,3 @@
-use super::icon::{Icon, IconName};
-use crate::theme::Size;
 use leptos::*;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -35,7 +33,7 @@ pub enum ButtonShape {
 
 #[component]
 pub fn Button(
-    #[prop(into)] text: MaybeSignal<String>,
+    #[prop(into, default = "".into())] text: MaybeSignal<String>,
     #[prop(into, default = ButtonVariant::Primary.into())] variant: MaybeSignal<ButtonVariant>,
     #[prop(into, default = ButtonSize::Normal.into())] size: MaybeSignal<ButtonSize>,
     #[prop(into, default = ButtonShape::Round.into())] shape: MaybeSignal<ButtonShape>,
@@ -45,27 +43,34 @@ pub fn Button(
     #[prop(into, default = false.into())] plain: MaybeSignal<bool>,
     #[prop(into, default = false.into())] hairline: MaybeSignal<bool>,
     #[prop(into, default = false.into())] block: MaybeSignal<bool>,
+    #[prop(into, default = None.into())] on_click: Option<Callback<ev::MouseEvent, ()>>,
 ) -> impl IntoView {
+    let handle_click = move |ev: ev::MouseEvent| {
+        if let Some(cb) = &on_click {
+            cb.call(ev);
+        }
+    };
     view! {
         <button
             class="weui-btn"
-            class:weui-btn--primary=move || variant.get() == ButtonVariant::Primary
-            class:weui-btn--default=move || variant.get() == ButtonVariant::Default
-            class:weui-btn--warn=move || variant.get() == ButtonVariant::Warn
-            class:weui-btn--plain=move || plain.get()
-            class:weui-btn--disabled=move || disabled.get()
-            class:weui-btn--loading=move || loading.get()
-            class:weui-btn--block=move || block.get()
-            class:weui-btn--hairline=move || hairline.get()
-            class:weui-btn--round=move || shape.get() == ButtonShape::Round
-            class:weui-btn--circle=move || shape.get() == ButtonShape::Circle
-            class:weui-btn--square=move || shape.get() == ButtonShape::Square
-            class:weui-btn--small=move || size.get() == ButtonSize::Small || size.get() == ButtonSize::Mini
+            class=("weui-btn--primary", move || variant.get() == ButtonVariant::Primary)
+            class=("weui-btn--default", move || variant.get() == ButtonVariant::Default)
+            class=("weui-btn--warn", move || variant.get() == ButtonVariant::Warn)
+            class=("weui-btn--plain", move || plain.get())
+            class=("weui-btn--disabled", move || disabled.get())
+            class=("weui-btn--loading", move || loading.get())
+            class=("weui-btn--block", move || block.get())
+            class=("weui-btn--hairline", move || hairline.get())
+            class=("weui-btn--round", move || shape.get() == ButtonShape::Round)
+            class=("weui-btn--circle", move || shape.get() == ButtonShape::Circle)
+            class=("weui-btn--square", move || shape.get() == ButtonShape::Square)
+            class=("weui-btn--small", move || size.get() == ButtonSize::Small || size.get() == ButtonSize::Mini)
             type=move || match button_type.get() { ButtonType::Button => "button", ButtonType::Submit => "submit", ButtonType::Reset => "reset" }
             disabled=move || disabled.get()
             role="button"
             aria-disabled=move || disabled.get().to_string()
             aria-busy=move || loading.get().to_string()
+            on:click=handle_click
         >
             {move || {
                 if loading.get() {

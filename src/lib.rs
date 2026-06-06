@@ -6,7 +6,7 @@ pub mod theme;
 pub use components::actionsheet::{ActionSheetAction, ActionSheetConfig, ActionSheetController, ActionSheetProvider, provide_actionsheet, use_actionsheet};
 pub use components::badge::{Badge, BadgeType, BadgeVariant};
 pub use components::button::{Button, ButtonGroup, ButtonType, ButtonVariant, ButtonSize, ButtonShape};
-pub use components::cell::{Cell, CellGroup, CellSize, CellAlign, CellLabelAlign};
+pub use components::cell::{Cell, CellGroup, CellSize, CellAlign};
 pub use components::checkbox::{Checkbox, CheckboxDirection, CheckboxGroup, CheckboxShape, CheckboxSize, CheckboxLabelPosition, Radio};
 pub use components::dialog::{DialogAction, DialogConfig, DialogController, DialogProvider, DialogSize, DialogType, provide_dialog, use_dialog};
 pub use components::divider::{Divider, DividerOrientation, DividerStrokeStyle};
@@ -25,20 +25,5 @@ pub use components::switch::{Switch, Toggle, SwitchSize, SwitchVariant};
 pub use components::tag::{Tag, TagType, TagSize, TagVariant};
 pub use components::tabbar::{Tabbar, TabbarItemData, TabbarVariant};
 pub use components::toast::{ToastConfig, ToastController, ToastItem, ToastPosition, ToastProvider, ToastType, ToastCommand, provide_toast, use_toast};
-pub use components::theme::{Theme, ThemeContext, ThemeMode, ColorScheme, Breakpoint, Spacing, SemanticColor, Size, Direction, Position};
+pub use theme::{Theme, ThemeContext, ThemeMode, ColorScheme, Breakpoint, Spacing, SemanticColor, Size, Direction, Position};
 pub use components::uploader::{Uploader, UploaderStatus, UploadFile, UploaderSize};
-
-use wasm_bindgen::prelude::*;
-use web_sys::Document;
-
-#[cfg(target_arch = "wasm32")]
-#[wasm_bindgen(start)]
-pub fn main() {
-    console_error_panic_hook::set_once();
-    leptos::mount_to_body(|| view! { <App/> });
-}
-
-#[component]
-fn App() -> impl IntoView {
-    view! { <div class="weui-app">"Hello WeUI"</div> }
-}

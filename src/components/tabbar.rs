@@ -32,8 +32,8 @@ pub fn Tabbar(
     view! {
         <nav
             class=move || format!("weui-tabbar {} {}", variant_class(), class.get())
-            class:weui-tabbar--fixed=move || fixed.get()
-            class:weui-tabbar--safe-area=move || safe_area.get()
+            class=("weui-tabbar--fixed", move || fixed.get())
+            class=("weui-tabbar--safe-area", move || safe_area.get())
             role="tablist"
         >
             {children()}
@@ -49,7 +49,7 @@ pub fn TabbarItem(
     #[prop(into, default = "".into())] badge: MaybeSignal<String>,
     #[prop(into, default = false.into())] dot: MaybeSignal<bool>,
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
-    #[prop(into, default = None.into())] on_click: Option<Callback<String>>,
+    #[prop(into, default = None.into())] on_click: Option<Callback<String, ()>>,
 ) -> impl IntoView {
     let active = use_context::<ReadSignal<String>>();
     let is_active = create_memo(move |_| {
@@ -67,7 +67,7 @@ pub fn TabbarItem(
     view! {
         <button
             class=move || format!("weui-tabbar__item {}", class.get())
-            class:weui-tabbar__item--active=move || is_active.get()
+            class=("weui-tabbar__item--active", move || is_active.get())
             on:click=handle_click
             type="button"
             role="tab"

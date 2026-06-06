@@ -34,7 +34,7 @@ pub fn Tag(
     #[prop(into, default = false.into())] mark: MaybeSignal<bool>,
     #[prop(into, default = false.into())] visible: MaybeSignal<bool>,
     #[prop(into, default = "".into())] class: MaybeSignal<String>,
-    #[prop(into, default = None.into())] on_close: Option<Callback<()>>,
+    #[prop(into, default = None.into())] on_close: Option<Callback<(), ()>>,
     children: Children,
 ) -> impl IntoView {
     let type_class = move || match tag_type.get() {
@@ -65,8 +65,8 @@ pub fn Tag(
         <Show when=move || visible.get()>
             <span
                 class=move || format!("weui-tag {} {} {} {}", type_class(), size_class(), variant_class(), class.get())
-                class:weui-tag--round=move || round.get()
-                class:weui-tag--mark=move || mark.get()
+                class=("weui-tag--round", move || round.get())
+                class=("weui-tag--mark", move || mark.get())
             >
                 {children()}
                 {move || {
