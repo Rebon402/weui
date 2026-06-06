@@ -53,7 +53,7 @@ pub fn Form(
     };
     view! {
         <form
-            class=move || format!("weui-form {}", layout_class(), class.get())
+            class=move || format!("weui-form {} {}", layout_class(), class.get())
             class:weui-form--disabled=move || disabled.get()
             class:weui-form--readonly=move || readonly.get()
             novalidate="true"

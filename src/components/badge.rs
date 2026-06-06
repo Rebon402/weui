@@ -58,8 +58,8 @@ pub fn Badge(
             class=move || format!("weui-badge {}", class.get())
             class:weui-badge--dot=move || badge_type.get() == BadgeType::Dot
             class:weui-badge--visible=move || visible.get()
-            class:variant_class
-            class:size_class
+            class:variant_class=move || true
+            class:size_class=move || true
         >
             {badge_content}
             <span class="weui-badge__wrapper">

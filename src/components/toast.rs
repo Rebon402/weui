@@ -1,5 +1,5 @@
-use super::icon::{Icon, IconName, Size};
-use super::button::{Button, ButtonVariant, ButtonSize};
+use super::icon::{Icon, IconName};
+use crate::theme::Size;
 use leptos::*;
 use gloo_timers::future::TimeoutFuture;
 use uuid::Uuid;
@@ -159,8 +159,9 @@ pub fn ToastContainer() -> impl IntoView {
                 key=|t| t.id.clone()
                 children=move |config: ToastConfig| {
                     let id = config.id.clone();
+                    let toasts_clone = toasts.clone();
                     view! {
-                        <ToastItem config=config on_close=move || toasts.hide(&id)/>
+                        <ToastItem config=config on_close=move || toasts_clone.hide(&id)/>
                     }
                 }
             />
@@ -189,7 +190,6 @@ fn ToastItem(
     };
     if config.duration > 0 {
         let duration = config.duration;
-        let cfg_clone_for_timer = config.clone();
         spawn_local(async move {
             TimeoutFuture::new(duration).await;
             visible.set(false);

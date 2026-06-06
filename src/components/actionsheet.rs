@@ -1,5 +1,5 @@
 use super::button::{Button, ButtonVariant, ButtonSize};
-use super::icon::{Icon, IconName, Size};
+use super::icon::{Icon, IconName};
 use leptos::*;
 
 #[derive(Debug, Clone)]

@@ -1,4 +1,5 @@
-use super::icon::{Icon, IconName, Size};
+use super::icon::{Icon, IconName};
+use crate::theme::Size;
 use leptos::*;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -98,9 +99,9 @@ pub fn Checkbox(
             />
             <span class="weui-checkbox__icon" aria-hidden="true">
                 {move || {
-                    if indeterminate() {
+                    if indeterminate.get() {
                         view! { <Icon name=IconName::Minus size=Size::Sm/> }
-                    } else if checked() {
+                    } else if checked.get() {
                         view! { <Icon name=IconName::Check size=Size::Sm/> }
                     } else if shape.get() == CheckboxShape::Round {
                         view! { <Icon name=IconName::Circle size=Size::Xs/> }
@@ -125,7 +126,7 @@ pub fn CheckboxGroup(
     #[prop(into)] checked_values: MaybeSignal<Vec<String>>,
     #[prop(into)] on_change: Callback<Vec<String>>,
     #[prop(into, default = false.into())] disabled: MaybeSignal<bool>,
-    #[prop(into, default = false.into())] max_selection: MaybeSignal<Option<usize>>,
+    #[prop(into, default = 0usize.into())] max_selection: MaybeSignal<usize>,
     #[prop(into, default = CheckboxDirection::Vertical.into())] direction: MaybeSignal<CheckboxDirection>,
     children: Children,
 ) -> impl IntoView {
@@ -167,14 +168,14 @@ pub fn Radio(
         }
         on_change.call(!checked.get());
     };
-    let size_class = match size.get() {
+    let size_class = move || match size.get() {
         CheckboxSize::Small => "weui-radio--small",
         CheckboxSize::Medium => "",
         CheckboxSize::Large => "weui-radio--large",
     };
     view! {
         <label
-            class=move || format!("weui-radio {} {}", size_class, class.get())
+            class=move || format!("weui-radio {} {}", size_class(), class.get())
             class:weui-radio--disabled=move || disabled.get()
             class:weui-radio--checked=move || checked.get()
             style=style

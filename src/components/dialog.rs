@@ -1,5 +1,6 @@
 use super::button::{Button, ButtonVariant, ButtonSize};
 use super::icon::{Icon, IconName};
+use crate::theme::Size;
 use leptos::*;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -168,6 +169,7 @@ fn DialogView(
     view! {
         <div
             class="weui-dialog-overlay"
+            class:weui-dialog-overlay--visible=move || visible.get()
             on:click=handle_overlay_click
             on:keydown=handle_keydown
             tabindex="-1"
@@ -194,7 +196,7 @@ fn DialogView(
                                 aria-label="Close dialog"
                                 type="button"
                             >
-                                <Icon name=IconName::Close size=super::icon::Size::Lg/>
+                                <Icon name=IconName::Close size=Size::Lg/>
                             </button>
                         </Show>
                         <div class="weui-dialog__content" id="dialog-content">{cfg.message.clone()}</div>

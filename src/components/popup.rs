@@ -59,7 +59,7 @@ pub fn Popup(
                     on:click=handle_mask_click
                 />
                 <div
-                    class=move || format!("weui-popup {} {} {}", position_class(), animation_class(), class.get())
+                    class=move || format!("weui-popup {} {}", position_class(), animation_class(), class.get())
                     class:weui-popup--round=move || round.get()
                     class:weui-popup--safe-area=move || safe_area.get()
                     role="dialog"

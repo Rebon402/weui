@@ -1,4 +1,5 @@
-use super::icon::{Icon, IconName, Size};
+use super::icon::{Icon, IconName};
+use crate::theme::Size;
 use leptos::*;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -67,20 +68,22 @@ pub fn Input(
             input_ref.get().map(|el| el.focus().ok());
         }
     });
-    let type_attr: &'static str = match input_type.get() {
-        InputType::Text => "text",
-        InputType::Password => "password",
-        InputType::Number => "number",
-        InputType::Tel => "tel",
-        InputType::Email => "email",
-        InputType::Url => "url",
-        InputType::Search => "search",
-        InputType::Date => "date",
-        InputType::Time => "time",
-        InputType::DatetimeLocal => "datetime-local",
-        InputType::Month => "month",
-        InputType::Week => "week",
-        InputType::Color => "color",
+    let type_attr = move || -> &'static str {
+        match input_type.get() {
+            InputType::Text => "text",
+            InputType::Password => "password",
+            InputType::Number => "number",
+            InputType::Tel => "tel",
+            InputType::Email => "email",
+            InputType::Url => "url",
+            InputType::Search => "search",
+            InputType::Date => "date",
+            InputType::Time => "time",
+            InputType::DatetimeLocal => "datetime-local",
+            InputType::Month => "month",
+            InputType::Week => "week",
+            InputType::Color => "color",
+        }
     };
     let align_class = move || match align.get() {
         InputAlign::Left => "",
