@@ -70,41 +70,4 @@ pub fn Switch(
                 }}
             </span>
             {move || {
-                if !active_text.get().is_empty() || !inactive_text.get().is_empty() {
-                    view! {
-                        <span class="weui-switch__label">
-                            {move || {
-                                if checked.get() {
-                                    active_text.get()
-                                } else {
-                                    inactive_text.get()
-                                }
-                            }}
-                        </span>
-                    }
-                } else {
-                    view! {}
-                }
-            }}
-        </button>
-    }
-}
-
-#[component]
-pub fn Toggle(
-    #[prop(into)] checked: MaybeSignal<bool>,
-    #[prop(into)] on_change: Callback<bool>,
-    #[prop(into, default = false.into())] disabled: MaybeSignal<bool>,
-    #[prop(into, default = "".into())] class: MaybeSignal<String>,
-) -> impl IntoView {
-    view! {
-        <Switch
-            checked=checked
-            on_change=on_change
-            size=SwitchSize::Md
-            variant=SwitchVariant::Default
-            disabled=disabled
-            class=class
-        />
-    }
-}
+                if !active_text.get().is_empty() || !inactive_text.get().is_empty

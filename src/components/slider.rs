@@ -56,9 +56,9 @@ pub fn Slider(
             class:weui-slider--disabled=move || disabled.get()
             class:weui-slider--reverse=move || reverse.get()
             role="slider"
-            aria-valuemin=min
-            aria-valuemax=max
-            aria-valuenow=value
+            aria-valuemin=move || min.get()
+            aria-valuemax=move || max.get()
+            aria-valuenow=move || value.get()
             aria-disabled=move || disabled.get().to_string()
         >
             <div class="weui-slider__track">
@@ -88,9 +88,9 @@ pub fn Slider(
             <input
                 type="range"
                 class="weui-slider__input"
-                min=min
-                max=max
-                step=step
+                min=move || min.get()
+                max=move || max.get()
+                step=move || step.get()
                 prop:value=value
                 disabled=disabled
                 on:input=handle_input
